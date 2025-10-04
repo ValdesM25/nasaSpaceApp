@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Exosis</title>
+    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='modelo.css') }}>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href={{ url_for('static', filename='favicon.png') }} type="image/x-icon">
+
+</head>
+
+
 <h1>Welcome Back, Planet Hunter... {{ prueba }}!</h1>
+
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-black text-white flex items-center justify-center p-6">
+  <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <!-- Columna izquierda -->
+    <div class="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-indigo-500/30 shadow-lg space-y-6">
+      <h2 class="text-2xl font-semibold text-indigo-300 tracking-wide">Mission Control</h2>
+      <form class="space-y-4">
+        <div>
+          <label for="username" class="block text-sm text-indigo-200 mb-1">Commander Name</label>
+          <input type="text" id="username" placeholder="Enter your name"
+            class="w-full px-4 py-3 rounded-lg bg-white/10 border border-indigo-400/40 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 text-white placeholder:text-gray-400">
+        </div>
+        <div>
+          <label for="mission" class="block text-sm text-indigo-200 mb-1">Mission ID</label>
+          <input type="text" id="mission" placeholder="Mission identifier"
+            class="w-full px-4 py-3 rounded-lg bg-white/10 border border-indigo-400/40 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 text-white placeholder:text-gray-400">
+        </div>
+        <button type="submit"
+          class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold shadow-md transition duration-300">
+          Launch Mission
+        </button>
+      </form>
+    </div>
+
+    <!-- Zona central para Three.js o p5.js -->
+    <div id="space-scene"
+      class="bg-black/30 border border-indigo-500/20 rounded-2xl shadow-inner flex items-center justify-center text-gray-500 text-lg">
+      <!-- Aquí va tu canvas o animación -->
+      <p class="text-indigo-300/70 select-none">[ Space Simulation Area ]</p>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-indigo-500/30 shadow-lg space-y-6">
+      <h2 class="text-2xl font-semibold text-indigo-300 tracking-wide">Telemetry</h2>
+      <form class="space-y-4">
+        <div>
+          <label for="planet" class="block text-sm text-indigo-200 mb-1">Target Planet</label>
+          <input type="text" id="planet" placeholder="Exoplanet name"
+            class="w-full px-4 py-3 rounded-lg bg-white/10 border border-indigo-400/40 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 text-white placeholder:text-gray-400">
+        </div>
+        <div>
+          <label for="frequency" class="block text-sm text-indigo-200 mb-1">Signal Frequency</label>
+          <input type="number" id="frequency" placeholder="GHz"
+            class="w-full px-4 py-3 rounded-lg bg-white/10 border border-indigo-400/40 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 text-white placeholder:text-gray-400">
+        </div>
+        <button id="modelo-submit" type="submit"
+          class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-lg font-semibold shadow-md transition duration-300">
+          Send Data
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>
+

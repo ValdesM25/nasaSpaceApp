@@ -1,12 +1,9 @@
-console.log("login pendiente");
-
 const submit = document.getElementById('submit');
 let usuarioEl = document.getElementById('username');
 let passwordEl = document.getElementById('password');
 
 submit.addEventListener('click', (el) => {
   el.preventDefault();
-  console.log("prueba");
 
   const usuario = usuarioEl.value;
   const password = passwordEl.value;
