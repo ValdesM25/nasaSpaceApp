@@ -11,3 +11,5 @@ def home():
 # main
 app.run(debug=True)
 
+
+#<button type="submit" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition #duration-300 shadow-lg hover:shadow-indigo-500/50">Enter Orbit</button>
