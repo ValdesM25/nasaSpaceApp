@@ -18,14 +18,12 @@ html,body { height:100%; margin:0; background:linear-gradient(180deg,var(--bg),#
 header { display:flex; align-items:center; gap:24px; justify-content:space-between; margin-bottom: 24px; }
 h1 { font-size:24px; margin:0; color:#fff }
 
-/* Estructura principal para Perfil, Modelos y News */
 .community-layout {
   display: grid;
-  grid-template-columns: 1fr 3fr; /* Divide el espacio para el menú lateral y el contenido */
+  grid-template-columns: 1fr 3fr; 
   gap: 24px;
 }
 
-/* Panel lateral (Perfil y Modelos) */
 .sidebar {
   background: var(--panel);
   border-radius: var(--radius);
@@ -44,7 +42,6 @@ h1 { font-size:24px; margin:0; color:#fff }
   border-bottom: 1px solid rgba(255,255,255,0.05);
 }
 
-/* BOTÓN PERFIL (Avatar) */
 .profile-avatar {
   width: 60px; height: 60px;
   border-radius: 50%;
@@ -75,14 +72,12 @@ h1 { font-size:24px; margin:0; color:#fff }
   color: #fff;
 }
 
-/* Área de contenido principal (News) */
 .main-content {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-/* Sección de Noticias/Novedades */
 .news-section {
   background: var(--panel);
   border-radius: var(--radius);
@@ -114,7 +109,7 @@ h1 { font-size:24px; margin:0; color:#fff }
 .news-icon {
   width: 30px;
   height: 30px;
-  min-width: 30px; /* Evita que el ícono se comprima */
+  min-width: 30px; 
   background: var(--accent);
   border-radius: 50%;
   color: #fff;
@@ -138,16 +133,15 @@ h1 { font-size:24px; margin:0; color:#fff }
 }
 
 
-/* Tarjetas de Modelos - Adaptado del código original */
 .templates {
   display: flex;
   gap: 20px;
   padding: 10px 0;
   flex-wrap: wrap;
-  justify-content: center; /* Centrar modelos en la barra lateral */
+  justify-content: center; 
 }
 
-/* BOTÓN dentro de tarjeta */
+
 .btn-select {
   margin-top: 12px; padding: 8px 16px; border-radius: 8px;
   border: none; background-color: #0b5ed7; color: white;
@@ -158,11 +152,11 @@ h1 { font-size:24px; margin:0; color:#fff }
 
 /* TARJETAS */
 .card {
-  width: 140px; height: 180px; /* Más pequeñas para la barra lateral */
+  width: 140px; height: 180px; 
   background: rgb(103, 225, 255);
   transition: all 0.4s;
   border-radius: 10px;
-  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.3); /* Sombra más suave */
+  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.3); 
   font-size: 16px; font-weight: 600; position: relative;
 }
 .card:hover { border-radius: 12px; cursor: pointer; transform: scale(1.05); background: rgb(103, 151, 255); }
@@ -194,10 +188,9 @@ h1 { font-size:24px; margin:0; color:#fff }
   gap: 10px;
 }
 
-/* Media Query para pantallas pequeñas */
 @media (max-width:900px) {
   .community-layout {
-    grid-template-columns: 1fr; /* Una sola columna */
+    grid-template-columns: 1fr; 
   }
   .sidebar {
     padding-top: 10px;
@@ -233,7 +226,7 @@ h1 { font-size:24px; margin:0; color:#fff }
     margin-bottom: 5px;
   }
   .news-section {
-    order: -1; /* Mover la sección de News arriba en móviles */
+    order: -1; 
   }
 }
 
@@ -326,15 +319,6 @@ function seleccionarModelo(nombre) {
   modeloSeleccionado = nombre;
   alert('Modelo seleccionado: ' + nombre);
 }
-
-// Puedes reutilizar la función nuevoProyecto si quieres añadir un botón que use el modelo seleccionado
-// function nuevoProyecto() {
-//   if (!modeloSeleccionado) {
-//     alert('Debes seleccionar un modelo antes de crear un nuevo proyecto.');
-//     return;
-//   }
-//   alert('Nuevo proyecto creado usando el modelo: ' + modeloSeleccionado);
-// }
 </script>
 </body>
 </html>
