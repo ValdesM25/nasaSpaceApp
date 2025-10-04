@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Exosis</title>
     <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='login.css') }}>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+
     <script src="https://cdn.tailwindcss.com"></script>
+<link rel="icon" href={{ url_for('static', filename='favicon.png') }} type="image/x-icon">
+
 </head>
 <body>
-    <h1>Welcome Back, Planet Hunter... {{ prueba }}!</h1>
 
 <div class="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-900 to-black flex items-center justify-center p-8">
   <div class="flex items-center justify-between w-full max-w-5xl">
@@ -44,8 +46,8 @@
     <!-- ============================================== -->
 <!-- From Uiverse.io by Praashoo7 --> 
 <div class="main">
-  <button>
-    <div class="text">Log in</div>
+  <button id="submit">
+    <div class="text">&nbsp; Log in</div>
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 299 101" width="150px" height="50px" class="planet">
     
@@ -348,18 +350,28 @@
     <!-- Derecha: Espacio para logo -->
     <div class="hidden md:flex flex-1 justify-center items-center">
       <!-- Aquí puedes colocar tu logo o una imagen -->
-      <img src="{{ url_for('static', filename='logo.jpeg') }}" alt="Space App Logo" class="w-64 h-64 object-contain opacity-90" />
+      <img class="login-transform login-logos2" src="{{ url_for('static', filename='logo3.png') }}" alt="Space App Logo" class="w-64 h-64 object-contain opacity-90" />
+      <img class="login-logos" src="{{ url_for('static', filename='nasa-logo.svg') }}" alt="Space App Logo" class="w-64 h-64 object-contain opacity-90" />
     </div>
     <div>
-      <div class="login-logos">
-        
-      </div>
     </div>
   </div>
 </div>
 
-
-
+<div class="foot">
+  <div class="el-inline">
+    Soporte
+  </div>
+  <div class="el-inline">
+|
+  </div>
+  <div class="el-inline">
+    Contacto
+  </div>
+  <div class="el-inline">
+    &nbsp; &nbsp;
+  </div>
+</div>
 
     
 </body>

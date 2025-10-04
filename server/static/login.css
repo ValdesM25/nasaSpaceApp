@@ -14,7 +14,7 @@ body {
 }
 
 button {
-  width: 13em;
+  width: 19em;
   height: 3.5em;
   border: none;
   display: flex;
@@ -120,4 +120,20 @@ button:active .stars {
 /* ============================================== */
 .login-logos {
   position: relative;
+  top: 250px;
+  left: 270px;
+  transform: scale(0.65); /* Scales up by 50% */ 
+}
+.login-logos2 {
+  position: relative;
+  left: 85px;
+}
+.foot {
+  text-align: right;
+}
+.el-inline {
+  display: inline-block;
+}
+.login-transform {
+  transform: scale(1.05); /* Scales up by 50% */ 
 }
