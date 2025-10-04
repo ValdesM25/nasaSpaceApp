@@ -11,6 +11,9 @@ def home():
 def modelo():
     return render_template("modelo.html", prueba="")
 
+@app.route("/community")
+def community():
+    return render_template("community.html")
 
 # main
 app.run(debug=True)
