@@ -10,9 +10,9 @@ submit.addEventListener('click', (el) => {
 
   if (usuario == "admin" && password == "123") {
     //window.location.href = "../another-page.html"; // Redirects one level up
-    window.location.href = "/modelo"; // Redirects relative to the domain root
+    window.location.href = "/inicio"; // Redirects relative to the domain root
   } else {
     console.log("usuario: admin, password: 123");
-    window.location.href = "/modelo"; // Redirects relative to the domain root
+    window.location.href = "/inicio"; // Redirects relative to the domain root
   }
 });
