@@ -5,7 +5,11 @@ app = Flask(__name__)
 # login
 @app.route("/")
 def home():
-    return render_template("login.html", prueba="")
+    return render_template("login.html")
+# mandar al modelo
+@app.route("/modelo")
+def modelo():
+    return render_template("modelo.html", prueba="")
 
 
 # main
