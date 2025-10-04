@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modelo esfera — Sistema Solar interactivo (Ejemplo)</title>
+  <style>
+
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial}
+    #ui{position:absolute;left:12px;top:12px;z-index:10;background:rgba(255,255,255,0.9);padding:12px;border-radius:8px;max-width:360px}
+    label{display:block;font-size:13px;margin-top:6px}
+    input[type=range]{width:100%} 
+    #info{font-size:13px;margin-top:8px}
+    canvas{display:block}
+    
+  </style>
+  <script src="https://unpkg.com/three@0.153.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.153.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+  <div id="ui">
+    <strong>Modelo esfera — Sistema exoplanetario</strong>
+    <label>Tabla (API):
+      <select id="tableSelect">
+        <option value="exoplanets">exoplanets (confirmados)</option>
+        <option value="cumulative">cumulative (KOI Cumulative)</option>
+        <option value="TOI">TOI (TESS Objects of Interest)</option>
+        <option value="k2pandc">k2pandc (K2 planets & candidates)</option>
+      </select>
+    </label>
+    <label>Query (opcional) — cláusula WHERE (p. ej. pl_orbper &lt; 50):
+      <input id="where" placeholder="p. ej. pl_orbper < 100" style="width:100%" />
+    </label>
+    <label>Escala de distancia (multiplicador): <span id="distScaleVal">1</span>
+      <input type="range" id="distScale" min="0.01" max="5" step="0.01" value="1" />
+    </label>
+    <label>Escala de radios (multiplicador): <span id="radScaleVal">1</span>
+      <input type="range" id="radScale" min="0.1" max="50" step="0.1" value="1" />
+    </label>
+    <button id="loadBtn">Cargar y mostrar</button>
+    <div id="info">Descripción: cambia la tabla para usar los datos de las páginas que enviaste. El ejemplo intentará detectar columnas comunes (semieje, radio, periodo) y las mapeará a distancias y tamaños.</div>
+  </div>
+
+  <script>
+  function pickFirst(obj, keys){
+    for(const k of keys) if(k in obj) return obj[k];
+    return null;
+  }
+  function buildApiUrl(table, where){
+    const base = 'https://exoplanetarchive.ipac.caltech.edu/cgi-bin/nstedAPI/nph-nstedAPI?';
+    const params = new URLSearchParams();
+    params.set('table', table);
+    params.set('format','json');
+    if(where && where.trim().length>0) params.set('where', where);
+    return base + params.toString();
+  }
+
+  const distanceKeys = ['pl_orbsmax','koi_sma','sma','a','pl_orbsmax_err1'];
+  const radiusKeys = ['pl_rade','koi_prad','pl_radj','pl_rade','radius'];
+  const periodKeys = ['pl_orbper','koi_period','period','pl_orbper'];
+  const nameKeys = ['pl_name','kepoi_name','kepid','toi','kepid','hostname','kep_name','koi_name'];
+
+  let scene,camera,renderer,controls; let planetGroup;
+  const WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
+  function initThree(){
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 1e6);
+    camera.position.set(0,200,600);
+    renderer = new THREE.WebGLRenderer({antialias:true});
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    const amb = new THREE.AmbientLight(0xffffff,0.6); scene.add(amb);
+    const dir = new THREE.DirectionalLight(0xffffff,0.8); dir.position.set(5,10,7); scene.add(dir);
+
+    const grid = new THREE.GridHelper(2000,40,'#444','#222'); grid.rotation.x = Math.PI/2; grid.position.y = -200; scene.add(grid);
+
+    planetGroup = new THREE.Group(); scene.add(planetGroup);
+
+    const starGeo = new THREE.SphereGeometry(40,32,32);
+    const starMat = new THREE.MeshStandardMaterial({emissive:0xffffcc, emissiveIntensity:0.8, metalness:0.1});
+    const star = new THREE.Mesh(starGeo, starMat); star.name='star'; scene.add(star);
+
+    window.addEventListener('resize', ()=>{camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight);});
+
+    animate();
+  }
+
+  function clearPlanets(){ while(planetGroup.children.length) planetGroup.remove(planetGroup.children[0]); }
+
+  function animate(){
+    requestAnimationFrame(animate);
+    scene.rotation.y += 0.0005;
+    const t = Date.now()/1000;
+    planetGroup.children.forEach(p=>{
+      const per = p.userData.period || 10;
+      const a = p.userData.a || 100;
+      const ang = (t / per) * 2*Math.PI + (p.userData.phase||0);
+      p.position.set(a*Math.cos(ang), 0, a*Math.sin(ang));
+    });
+
+    controls.update(); renderer.render(scene,camera);
+  }
+
+  function normalizeAndScale(values, scaleMin, scaleMax, outMin, outMax){
+    const min = Math.min(...values), max = Math.max(...values);
+    const span = (max-min) || 1;
+    return values.map(v=> ((v-min)/span)*(outMax-outMin)+outMin);
+  }
+
+  function drawOrbit(radius){
+    const curve = new THREE.EllipseCurve(0,0, radius, radius, 0, 2*Math.PI, false, 0);
+    const points = curve.getPoints(128);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points.map(p=>new THREE.Vector3(p.x,0,p.y)));
+    const material = new THREE.LineBasicMaterial({opacity:0.3,transparent:true});
+    const ellipse = new THREE.LineLoop(geometry, material);
+    planetGroup.add(ellipse);
+  }
+
+  async function loadAndRender(table, whereStr, distScale, radScale){
+    const url = buildApiUrl(table, whereStr);
+    console.log('LLAMANDO API:',url);
+    let resp;
+    try{ resp = await fetch(url); }
+    catch(err){ alert('Error al acceder a la API (CORS o red). Puedes descargar manualmente un CSV desde la página y cargarlo localmente. Detalle: '+err); return; }
+    if(!resp.ok){ alert('Respuesta del API no OK: '+resp.status); return; }
+    const data = await resp.json();
+    if(!Array.isArray(data) || data.length===0){ alert('No se obtuvieron registros'); return; }
+
+    const sample = data[0];
+    const names = [];
+    const as = [];
+    const rads = [];
+    const pers = [];
+
+    data.forEach((row,i)=>{
+      const name = pickFirst(row, nameKeys) || ('planet_'+i);
+      const a = pickFirst(row, distanceKeys);
+      const r = pickFirst(row, radiusKeys);
+      const p = pickFirst(row, periodKeys);
+      const an = Number(a);
+      const rn = Number(r);
+      const pn = Number(p);
+      if(!isNaN(an) || !isNaN(pn)){
+        names.push(name);
+        as.push(isNaN(an)?(pn||1):an);
+        rads.push(isNaN(rn)?1:rn);
+        pers.push(isNaN(pn)?(Math.sqrt((an||1))) : pn);
+      }
+    });
+
+    const distNorm = normalizeAndScale(as,0,1, 80, 400);
+    const radNorm = normalizeAndScale(rads,0,1, 1.5, 25);
+
+    clearPlanets();
+
+    for(let i=0;i<names.length;i++){
+      const dist = distNorm[i]*distScale;
+      const radius = radNorm[i]*radScale;
+      drawOrbit(dist);
+      const geo = new THREE.SphereGeometry(radius, 24, 24);
+      const mat = new THREE.MeshStandardMaterial({roughness:0.6});
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.userData = {name:names[i], a:dist, radius:radius, period: pers[i]||10, raw_a:as[i], raw_r:rads[i]};
+      mesh.position.set(dist,0,0);
+      planetGroup.add(mesh);
+
+      const canvas = document.createElement('canvas'); canvas.width=256; canvas.height=64; const ctx=canvas.getContext('2d'); ctx.font='18px Arial'; ctx.fillStyle='white'; ctx.fillText(names[i].slice(0,24),10,30);
+      const tex = new THREE.CanvasTexture(canvas);
+      const sprMat = new THREE.SpriteMaterial({map:tex, transparent:true});
+      const spr = new THREE.Sprite(sprMat); spr.scale.set(100,25,1); spr.position.set(dist, radius+12, 0);
+      planetGroup.add(spr);
+    }
+
+    console.log('Planetas renderizados:', names.length);
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    initThree();
+    const tableSelect = document.getElementById('tableSelect');
+    const loadBtn = document.getElementById('loadBtn');
+    const whereInp = document.getElementById('where');
+    const distScale = document.getElementById('distScale');
+    const radScale = document.getElementById('radScale');
+    const distScaleVal = document.getElementById('distScaleVal');
+    const radScaleVal = document.getElementById('radScaleVal');
+
+    distScale.addEventListener('input', ()=>{distScaleVal.textContent = distScale.value});
+    radScale.addEventListener('input', ()=>{radScaleVal.textContent = radScale.value});
+
+    loadBtn.addEventListener('click', ()=>{
+      const table = tableSelect.value; const where = whereInp.value;
+      loadAndRender(table, where, Number(distScale.value), Number(radScale.value));
+    });
+
+    loadBtn.click();
+  });
+  </script>
+</body>
+</html>
