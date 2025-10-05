@@ -38,7 +38,15 @@ tessn['category'] = tessn['category'].apply(
 
 kepler = pd.read_csv('datasets/kepler.csv')
 
-print(kepler['category'].unique())
-print(k2n['category'].unique())
-print(tessn['category'].unique())
+kepler = kepler.dropna()
+k2n = k2n.dropna()
+tessn = tessn.dropna()
+
+k2n.to_csv('datasets/k2n.csv', index=False)
+tessn.to_csv('datasets/tessn.csv', index=False)
+kepler.to_csv('datasets/keplern.csv', index=False)
+
+print(kepler.info())
+print(k2n.info())
+print(tessn.info())
 
