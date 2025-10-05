@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 import io
+from flask_cors import CORS # Importa la librería
 
-from server.memory import retornodf
-from ml.inference import predict_exoplanet
+
+#from server.memory import retornodf
+#from ml.inference import predict_exoplanet
 
 app = Flask(__name__)
 
@@ -84,5 +86,15 @@ def community():
 app.run(debug=True)
 
 
+
+#ruta sistema solar
+# Le da permiso al frontend de Vite para hablar con Flask
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}) 
+
+@app.route('/api/datos_planetas', methods=['GET'])
+def get_planetas():
+    # Aquí obtienes los datos de tu base de datos o lógica de Flask
+    datos = {"planetas": ["Marte", "Tierra", "Júpiter"], "version": "1.0"}
+    return jsonify(datos)
 
 #<button type="submit" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition #duration-300 shadow-lg hover:shadow-indigo-500/50">Enter Orbit</button>
