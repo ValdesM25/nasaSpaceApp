@@ -174,35 +174,4 @@ canvas#myPieChart {
     background-color: #b91c1c; /* red-700 */
 }
 
-/* ============================= */
-/* BOTÓN FLOTANTE DE INICIO      */
-/* ============================= */
-#botonInicioContainer {
-    position: fixed;
-    bottom: 32px;
-    left: 32px;
-    z-index: 50;
-}
-#botonInicio {
-    width: 64px;
-    height: 64px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-#botonInicio:hover {
-    transform: scale(1.1);
-    background: rgba(255, 255, 255, 0.2);
-}
-#botonInicio img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover; /* <-- LÍNEA AÑADIDA */
-}
+

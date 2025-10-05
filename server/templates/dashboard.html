@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exosis - Model Dashboard</title>
 
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
@@ -67,18 +69,27 @@
         </div>
     </div>
 
-    <div id="botonInicioContainer">
-        <div id="botonInicio">
-            <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Home Icon">
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+
+    <div id="botonInicio" class="relative w-full h-8 bg-white-100">
+        <div class="absolute bottom-8 left-6 w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-white transition transform hover:scale-105 cursor-pointer">
+            <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Icon" class="w-10 h-10">
         </div>
+        <script>
+          const botonInicio = document.getElementById('botonInicio');
+          botonInicio.addEventListener('click', (el) => {
+            el.preventDefault();
+            window.location.href = "/inicio"; // Redirects relative to the domain root
+          });
+        </script>
     </div>
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
 
     <script>
-        // Lógica del botón de inicio
-        document.getElementById('botonInicio').addEventListener('click', (el) => {
-            el.preventDefault();
-            window.location.href = "/inicio";
-        });
 
         // Configuración y datos del gráfico
         const ctx = document.getElementById('myPieChart').getContext('2d');
@@ -112,6 +123,6 @@
             }
         });
     </script>
-    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </body>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </html>
