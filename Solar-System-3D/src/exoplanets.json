@@ -1,0 +1,44 @@
+{
+  "Venus": {
+    "name": "Kepler-1649 b",
+    "koiPeriod": "8.689",
+    "transitEpoch": "133.45",
+    "impactParameter": "0.12",
+    "transitDuration": "1.05",
+    "transitDepth": "3500",
+    "planetaryRadius": "1.02",
+    "equilibriumTemperature": "553",
+    "insolationFlux": "2.3",
+    "stellarEffectiveTemperature": "3240",
+    "stellarSurfaceGravity": "4.9",
+    "stellarRadius": "0.23"
+  },
+  "Earth": {
+    "name": "Kepler-186 f",
+    "koiPeriod": "129.945",
+    "transitEpoch": "151.36",
+    "impactParameter": "0.41",
+    "transitDuration": "3.88",
+    "transitDepth": "400",
+    "planetaryRadius": "1.11",
+    "equilibriumTemperature": "188",
+    "insolationFlux": "0.32",
+    "stellarEffectiveTemperature": "3755",
+    "stellarSurfaceGravity": "4.8",
+    "stellarRadius": "0.52"
+  },
+  "Mars": {
+    "name": "Kepler-37 d",
+    "koiPeriod": "39.792",
+    "transitEpoch": "140.22",
+    "impactParameter": "0.27",
+    "transitDuration": "3.10",
+    "transitDepth": "230",
+    "planetaryRadius": "1.94",
+    "equilibriumTemperature": "260",
+    "insolationFlux": "0.41",
+    "stellarEffectiveTemperature": "5417",
+    "stellarSurfaceGravity": "4.4",
+    "stellarRadius": "0.79"
+  }
+}

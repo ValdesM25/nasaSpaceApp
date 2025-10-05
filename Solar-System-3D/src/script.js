@@ -35,6 +35,7 @@ import uranusTexture from '/images/uranus.jpg';
 import uraRingTexture from '/images/uranus_ring.png';
 import neptuneTexture from '/images/neptune.jpg';
 import plutoTexture from '/images/plutomap.jpg';
+import exoplanets from './exoplanets.json';
 
 // ******  SETUP  ******
 console.log("Create the scene");
@@ -102,19 +103,15 @@ customContainer.appendChild(gui.domElement);
 // ****** SETTINGS FOR INTERACTIVE CONTROLS  ******
 const settings = {
   accelerationOrbit: 1,
-  acceleration: 1,
-  sunIntensity: 1.9
+  acceleration: 1
 };
 
 gui.add(settings, 'accelerationOrbit', 0, 10).onChange(value => {
 });
 gui.add(settings, 'acceleration', 0, 10).onChange(value => {
 });
-gui.add(settings, 'sunIntensity', 1, 10).onChange(value => {
-  sunMat.emissiveIntensity = value;
-});
 
-// User choice: number of planets to show (1, 2, or 3)
+// que sea con una variable de un json, todo lo que se ingrese que venga de un json
 function getPlanetCountFromUser() {
   const input = prompt('¿Cuántos planetas quieres mostrar? (1, 2 o 3)', '3');
   const n = parseInt(input, 10);
@@ -192,7 +189,7 @@ function showPlanetInfo(planet) {
   name.innerText = planet;
   const base = `Radius: ${planetData[planet].radius}\nTilt: ${planetData[planet].tilt}\nRotation: ${planetData[planet].rotation}\nOrbit: ${planetData[planet].orbit}\nDistance: ${planetData[planet].distance}\nMoons: ${planetData[planet].moons}\nInfo: ${planetData[planet].info}`;
   const exo = (typeof exoplanetData !== 'undefined' && exoplanetData[planet]) ? exoplanetData[planet] : {};
-  const exoText = `\n\nExoplaneta:\n0. Nombre: ${exo.name || '-'}\n1. Koi/Orbital Period: ${exo.koiPeriod || '-'}\n2. Transit Epoch: ${exo.transitEpoch || '-'}\n3. Impact Parameter: ${exo.impactParameter || '-'}\n4. Transit Duration: ${exo.transitDuration || '-'}\n5. Transit Depth: ${exo.transitDepth || '-'}\n6. Planetary Radius: ${exo.planetaryRadius || '-'}\n7. Equilibrium Temperature: ${exo.equilibriumTemperature || '-'}\n8. Insolation Flux: ${exo.insolationFlux || '-'}\n9. Stellar Effective Temperature: ${exo.stellarEffectiveTemperature || '-'}\n10. Stellar Surface Gravity: ${exo.stellarSurfaceGravity || '-'}\n11. Stellar Radius: ${exo.stellarRadius || '-'}`;
+  const exoText = `\n\nExoplaneta:\n0. Nombre: ${exo.name || '-'}`;
   details.innerText = base + exoText;
 
   info.style.display = 'block';
@@ -222,7 +219,7 @@ const sunGeom = new THREE.SphereGeometry(sunSize, 32, 20);
 sunMat = new THREE.MeshStandardMaterial({
   emissive: 0xFFF88F,
   emissiveMap: loadTexture.load(sunTexture),
-  emissiveIntensity: settings.sunIntensity
+  emissiveIntensity: 2
 });
 const sun = new THREE.Mesh(sunGeom, sunMat);
 scene.add(sun);
@@ -272,6 +269,13 @@ function kelvinToRgb(kelvin) {
   return { r: red / 255, g: green / 255, b: blue / 255 };
 }
 
+function temperatureToIntensity(kelvin) {
+  const minK = 2400, maxK = 7500;
+  const minI = 1.0, maxI = 10.0;
+  const t = Math.min(Math.max((kelvin - minK) / (maxK - minK), 0), 1);
+  return minI + t * (maxI - minI);
+}
+
 function applyStarSettings() {
   // Scale sun by selected solar radii (geometry at 1 R⊙ base)
   sun.scale.setScalar(starSettings.radiusSolar);
@@ -279,6 +283,8 @@ function applyStarSettings() {
   const rgb = kelvinToRgb(starSettings.temperature);
   sunMat.emissive.setRGB(rgb.r, rgb.g, rgb.b);
   pointLight.color.setRGB(rgb.r, rgb.g, rgb.b);
+  // Vincular la luminiscencia a la temperatura
+  sunMat.emissiveIntensity = temperatureToIntensity(starSettings.temperature);
 }
 
 // GUI controls for the star
@@ -414,7 +420,7 @@ function createPlanet(planetName, size, position, tilt, texture, bump, ring, atm
   //add planet system to planet3d object and to the scene
   planet3d.add(planetSystem);
   scene.add(planet3d);
-  return {name, planet, planet3d, Atmosphere, moons, planetSystem, Ring};
+  return {name, planet, planet3d, Atmosphere, moons, planetSystem, Ring, baseSize: size, orbitLine: orbit};
 }
 
 
@@ -697,22 +703,75 @@ const exoplanetData = {
   }
 };
 
+// Cargar datos de exoplanetas desde JSON de ejemplo
+try {
+  if (exoplanets && typeof exoplanets === 'object') {
+    Object.keys(exoplanets).forEach(k => {
+      if (!exoplanetData[k]) exoplanetData[k] = {};
+      Object.assign(exoplanetData[k], exoplanets[k]);
+    });
+  }
+} catch (e) {
+  console.warn('No se pudo cargar exoplanets.json:', e);
+}
 const exoFolder = gui.addFolder('Exoplanetas');
 selectedPlanets.forEach(p => {
   const key = p.name;
   const f = exoFolder.addFolder(key);
   f.add(exoplanetData[key], 'name').name('0. Nombre');
-  f.add(exoplanetData[key], 'koiPeriod').name('1. Orbital Period');
-  f.add(exoplanetData[key], 'transitEpoch').name('2. Transit Epoch');
-  f.add(exoplanetData[key], 'impactParameter').name('3. Impact Parameter');
-  f.add(exoplanetData[key], 'transitDuration').name('4. Transit Duration');
-  f.add(exoplanetData[key], 'transitDepth').name('5. Transit Depth');
-  f.add(exoplanetData[key], 'planetaryRadius').name('6. Planetary Radius');
-  f.add(exoplanetData[key], 'equilibriumTemperature').name('7. Equilibrium Temp');
-  f.add(exoplanetData[key], 'insolationFlux').name('8. Insolation Flux');
-  f.add(exoplanetData[key], 'stellarEffectiveTemperature').name('9. Stellar Teff');
-  f.add(exoplanetData[key], 'stellarSurfaceGravity').name('10. Stellar log g');
-  f.add(exoplanetData[key], 'stellarRadius').name('11. Stellar Radius');
+});
+
+// ******  TABLA PLANETAS (Radio y Distancia dinámicos)  ******
+function updatePlanetRadius(p, newSize) {
+  if (!p.baseSize) return;
+  const scale = newSize / p.baseSize;
+  p.planet.scale.setScalar(scale);
+  if (p.Atmosphere) p.Atmosphere.scale.setScalar(1); // Atmosfera escala junto a planeta por jerarquía
+  // Actualizar datos visibles en tarjeta
+  if (planetData[p.name]) {
+    planetData[p.name].radius = `${newSize.toFixed(2)} u`;
+  }
+}
+function updatePlanetDistance(p, newDist) {
+  // actualizar posición orbital
+  p.planet.position.x = newDist;
+  if (p.Ring) p.Ring.position.x = newDist;
+  // actualizar línea de órbita si existe
+  try {
+    const newCurve = new THREE.EllipseCurve(0, 0, newDist, newDist, 0, 2 * Math.PI, false, 0);
+    const pts = newCurve.getPoints(100);
+    const newGeom = new THREE.BufferGeometry().setFromPoints(pts);
+    newGeom.rotateX(Math.PI / 2);
+    if (p.orbitLine) {
+      p.orbitLine.geometry.dispose();
+      p.orbitLine.geometry = newGeom;
+    } else {
+      // fallback: localizar primera LineLoop del sistema y reemplazar
+      const line = p.planetSystem.children.find(c => c.isLineLoop);
+      if (line) {
+        line.geometry.dispose();
+        line.geometry = newGeom;
+      }
+    }
+  } catch (e) { /* noop */ }
+  // Actualizar datos visibles en tarjeta
+  if (planetData[p.name]) {
+    planetData[p.name].distance = `${Math.round(newDist)} u`;
+  }
+}
+
+const planetsTableFolder = gui.addFolder('Tabla Planetas');
+const planetEditableData = {};
+selectedPlanets.forEach(p => {
+  planetEditableData[p.name] = {
+    radius: p.baseSize || p.planet.geometry.parameters.radius || 5,
+    distance: p.planet.position.x
+  };
+  const f = planetsTableFolder.addFolder(p.name);
+  f.add(planetEditableData[p.name], 'radius', 1, 20).name('Radio (u)')
+    .onChange(v => updatePlanetRadius(p, v));
+  f.add(planetEditableData[p.name], 'distance', 40, 200).name('Distancia (u)')
+    .onChange(v => updatePlanetDistance(p, v));
 });
 
 
