@@ -1,0 +1,4 @@
+,accuracy,accuracy_percent,model_path,train_size,test_size,timestamp
+XGBoost,0.9325,93.25,ml/models/xgboost_model.pkl,5860,1466,2025-10-05_05-11-56
+LightGBM,0.9332,93.32,ml/models/lightgbm_model.pkl,5860,1466,2025-10-05_05-11-56
+RandomForest,0.9086,90.86,ml/models/randomforest_model.pkl,5860,1466,2025-10-05_05-11-56
