@@ -14,16 +14,18 @@ import bgTexture4 from '/images/4.jpg';
 import sunTexture from '/images/sun.jpg';
 import mercuryTexture from '/images/mercurymap.jpg';
 import mercuryBump from '/images/mercurybump.jpg';
-import venusTexture from '/images/venusmap.jpg';
-import venusBump from '/images/venusmap.jpg';
-import venusAtmosphere from '/images/venus_atmosphere.jpg';
-import earthTexture from '/images/earth_daymap.jpg';
+import venusTexture from '/images/nuevas/triton.jpg';
+import venusBump from '/images/nuevas/triton.jpg';
+import venusAtmosphere from '/images/earth_atmosphere.jpg';
+
+import earthTexture from '/images/nuevas/callisto.jpg';
 import earthNightTexture from '/images/earth_nightmap.jpg';
 import earthAtmosphere from '/images/earth_atmosphere.jpg';
 import earthMoonTexture from '/images/moonmap.jpg';
 import earthMoonBump from '/images/moonbump.jpg';
-import marsTexture from '/images/marsmap.jpg';
-import marsBump from '/images/marsbump.jpg';
+
+import marsTexture from '/images/nuevas/deimos.jpg';
+import marsBump from '/images/earth_nightmap.jpg';
 import jupiterTexture from '/images/jupiter.jpg';
 import ioTexture from '/images/jupiterIo.jpg';
 import europaTexture from '/images/jupiterEuropa.jpg';
@@ -166,15 +168,15 @@ function onDocumentMouseDown(event) {
 
 function identifyPlanet(clickedObject) {
   // Logic to identify which planet was clicked based on the clicked object, different offset for camera distance
-        if (clickedObject.material === venus.Atmosphere.material) {
+        if (clickedObject.material === Exoplaneta_1.Atmosphere.material) {
           offset = 25;
-          return venus;
-        } else if (clickedObject.material === earth.Atmosphere.material) {
+          return Exoplaneta_1;
+        } else if (clickedObject.material === Exoplaneta_2.Atmosphere.material) {
           offset = 25;
-          return earth;
-        } else if (clickedObject.material === mars.planet.material) {
+          return Exoplaneta_2;
+        } else if (clickedObject.material === Exoplaneta_3.planet.material) {
           offset = 15;
-          return mars;
+          return Exoplaneta_3;
         } 
 
   return null;
@@ -185,8 +187,14 @@ function showPlanetInfo(planet) {
   var info = document.getElementById('planetInfo');
   var name = document.getElementById('planetName');
   var details = document.getElementById('planetDetails');
+ 
+  // Cambiar los nombres para mostrar "Exoplaneta_X" junto con el nombre original
+  let displayName = planet;
+  if (planet === 'Venus') displayName = 'Exoplaneta_1 (Kepler-1649 b)';
+  else if (planet === 'Earth') displayName = 'Exoplaneta_2 (Kepler-186 f)';
+  else if (planet === 'Mars') displayName = 'Exoplaneta_3 (Kepler-37 d)';
 
-  name.innerText = planet;
+  name.innerText = displayName;
   const base = `Radius: ${planetData[planet].radius}\nTilt: ${planetData[planet].tilt}\nRotation: ${planetData[planet].rotation}\nOrbit: ${planetData[planet].orbit}\nDistance: ${planetData[planet].distance}\nMoons: ${planetData[planet].moons}\nInfo: ${planetData[planet].info}`;
   const exo = (typeof exoplanetData !== 'undefined' && exoplanetData[planet]) ? exoplanetData[planet] : {};
   const exoText = `\n\nExoplaneta:\n0. Nombre: ${exo.name || '-'}`;
@@ -420,7 +428,7 @@ function createPlanet(planetName, size, position, tilt, texture, bump, ring, atm
   //add planet system to planet3d object and to the scene
   planet3d.add(planetSystem);
   scene.add(planet3d);
-  return {name, planet, planet3d, Atmosphere, moons, planetSystem, Ring, baseSize: size, orbitLine: orbit};
+  return {name, planet, planet3d, Atmosphere, moons, planetSystem, Ring, baseSize: size, orbitLine: orbit, originalMaterial: material};
 }
 
 
@@ -542,7 +550,7 @@ const marsMoons = [
 // Helper: ensure Mars moons visibility matches selection
 function setMarsMoonVisibility() {
   try {
-    const marsIncluded = typeof selectedPlanets !== 'undefined' ? selectedPlanets.includes(mars) : true;
+    const marsIncluded = typeof selectedPlanets !== 'undefined' ? selectedPlanets.includes(Exoplaneta_3) : true;
     marsMoons.forEach(moon => {
       if (moon.mesh) {
         moon.mesh.visible = marsIncluded;
@@ -581,14 +589,15 @@ const jupiterMoons = [
   }
 ];
 
-const venus = new createPlanet('Venus', 6.1, 65, 3, venusTexture, venusBump, null, venusAtmosphere);
-const earth = new createPlanet('Earth', 6.4, 90, 23, earthMaterial, null, null, earthAtmosphere, earthMoon);
-const mars = new createPlanet('Mars', 3.4, 115, 25, marsTexture, marsBump)
+// Cambiar los nombres de las variables de planetas
+const Exoplaneta_1 = new createPlanet('Venus', 6.1, 65, 3, venusTexture, venusBump, null, venusAtmosphere);
+const Exoplaneta_2 = new createPlanet('Earth', 6.4, 90, 23, earthMaterial, null, null, earthAtmosphere, earthMoon);
+const Exoplaneta_3 = new createPlanet('Mars', 3.4, 115, 25, marsTexture, marsBump)
 // Load Mars moons
 marsMoons.forEach(moon => {
   loadObject(moon.modelPath, moon.position, moon.scale, function(loadedModel) {
     moon.mesh = loadedModel;
-    mars.planetSystem.add(moon.mesh);
+    Exoplaneta_3.planetSystem.add(moon.mesh);
     moon.mesh.traverse(function (child) {
       if (child.isMesh) {
         child.castShadow = true;
@@ -602,7 +611,7 @@ marsMoons.forEach(moon => {
 
   // ******  PLANETS SELECTION ******
 const selectedPlanetCount = getPlanetCountFromUser();
-const allPlanets = [venus, earth, mars];
+const allPlanets = [Exoplaneta_1, Exoplaneta_2, Exoplaneta_3];
 const selectedPlanets = allPlanets.slice(0, selectedPlanetCount);
 
 // Set visibility of planets and their moons/rings according to selection
@@ -717,7 +726,13 @@ try {
 const exoFolder = gui.addFolder('Exoplanetas');
 selectedPlanets.forEach(p => {
   const key = p.name;
-  const f = exoFolder.addFolder(key);
+  // Cambiar los nombres en la GUI para mostrar Exoplaneta_X
+  let displayName = key;
+  if (key === 'Venus') displayName = 'Exoplaneta_1';
+  else if (key === 'Earth') displayName = 'Exoplaneta_2';
+  else if (key === 'Mars') displayName = 'Exoplaneta_3';
+  
+  const f = exoFolder.addFolder(displayName);
   f.add(exoplanetData[key], 'name').name('0. Nombre');
 });
 
@@ -763,15 +778,291 @@ function updatePlanetDistance(p, newDist) {
 const planetsTableFolder = gui.addFolder('Tabla Planetas');
 const planetEditableData = {};
 selectedPlanets.forEach(p => {
+  // Cambiar los nombres en la tabla para mostrar Exoplaneta_X
+  let displayName = p.name;
+  if (p.name === 'Venus') displayName = 'Exoplaneta_1';
+  else if (p.name === 'Earth') displayName = 'Exoplaneta_2';
+  else if (p.name === 'Mars') displayName = 'Exoplaneta_3';
+  
   planetEditableData[p.name] = {
     radius: p.baseSize || p.planet.geometry.parameters.radius || 5,
     distance: p.planet.position.x
   };
-  const f = planetsTableFolder.addFolder(p.name);
+  const f = planetsTableFolder.addFolder(displayName);
   f.add(planetEditableData[p.name], 'radius', 1, 20).name('Radio (u)')
     .onChange(v => updatePlanetRadius(p, v));
   f.add(planetEditableData[p.name], 'distance', 40, 200).name('Distancia (u)')
     .onChange(v => updatePlanetDistance(p, v));
+});
+
+// ****** Apariencia Exoplaneta (textura aproximada y propiedades) ******
+function parseNum(v, def) {
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : def;
+}
+function getExo(name) {
+  return (typeof exoplanetData !== 'undefined' && exoplanetData[name]) ? exoplanetData[name] : {};
+}
+function computeLuminosityRatio(exoStar) {
+  const r = parseNum(exoStar.stellarRadius, (typeof starSettings !== 'undefined' ? starSettings.radiusSolar : 1));
+  const t = parseNum(exoStar.stellarEffectiveTemperature, (typeof starSettings !== 'undefined' ? starSettings.temperature : 5778));
+  return Math.pow(r, 2) * Math.pow(t / 5778, 4);
+}
+function approximatePlanetProps(p) {
+  const exo = getExo(p.name);
+  const pr = Math.max(0.2, parseNum(exo.planetaryRadius, 1)); // en radios terrestres
+  const eqT = parseNum(exo.equilibriumTemperature, 288);
+  const S = Math.max(0.01, parseNum(exo.insolationFlux, 1)); // flujo relativo a la Tierra
+  const L = computeLuminosityRatio(exo);
+  const aAU = Math.sqrt(L / S); // distancia en AU aprox.
+  const AU_UNITS = (typeof Exoplaneta_2 !== 'undefined' ? Exoplaneta_2.planet.position.x : 90); // 1 AU en unidades de escena
+  const earthSizeUnits = (typeof Exoplaneta_2 !== 'undefined' ? Exoplaneta_2.baseSize : 6.4);
+  const newSize = earthSizeUnits * pr; // escalar por radios terrestres
+  const newDist = AU_UNITS * aAU; // distancia en unidades de escena
+  updatePlanetRadius(p, newSize);
+  updatePlanetDistance(p, newDist);
+  return { eqT };
+}
+function clamp01(x){ return Math.min(1, Math.max(0, x)); }
+function mix(a,b,t){ return a+(b-a)*t; }
+function hexToRgb(hex){
+  const n = hex.replace('#','');
+  const bigint = parseInt(n,16);
+  return {r:(bigint>>16)&255,g:(bigint>>8)&255,b:bigint&255};
+}
+function rgbToHex(r,g,b){
+  const toHex = v => ('0'+v.toString(16)).slice(-2);
+  return '#'+toHex(r)+toHex(g)+toHex(b);
+}
+function tintHex(hex, rgb, amt){
+  const c = hexToRgb(hex);
+  const r = Math.round(mix(c.r, Math.round(rgb.r*255), amt));
+  const g = Math.round(mix(c.g, Math.round(rgb.g*255), amt));
+  const b = Math.round(mix(c.b, Math.round(rgb.b*255), amt));
+  return rgbToHex(r,g,b);
+}
+function irregularBlob(ctx, cx, cy, radius, color){
+  ctx.beginPath();
+  const points = 6 + Math.floor(Math.random()*6);
+  for (let i=0;i<=points;i++){
+    const ang = (i/points)*Math.PI*2;
+    const r = radius * (0.6 + Math.random()*0.6);
+    const x = cx + Math.cos(ang)*r;
+    const y = cy + Math.sin(ang)*r*mix(0.6,1.4,Math.random());
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function generatePlanetTextureByParams(eqT, starRGB, visParams, planetRef) {
+  const c = document.createElement('canvas');
+  c.width = 1024; c.height = 512;
+  const ctx = c.getContext('2d');
+
+  // Paleta base según temperatura de equilibrio
+  let base1, base2;
+  if (eqT < 250) { // helado
+    base1 = '#88ccee'; base2 = '#e6f3ff';
+  } else if (eqT < 350) { // templado
+    base1 = '#2f5d62'; base2 = '#a7c957';
+  } else { // caliente
+    base1 = '#7a2e0e'; base2 = '#f29f05';
+  }
+
+  // Considerar color de la estrella (tinte global)
+  const starTint = 0.15; // fuerza del tinte
+  base1 = tintHex(base1, starRGB, starTint);
+  base2 = tintHex(base2, starRGB, starTint);
+
+  // Fondo degradado horizontal
+  const grad = ctx.createLinearGradient(0, 0, c.width, 0);
+  grad.addColorStop(0, base1);
+  grad.addColorStop(1, base2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  // Determinar tipo planetario
+  let planetType = visParams?.planetType || 'Auto';
+  const exo = getExo(planetRef?.name || '');
+  const pr = parseNum(exo.planetaryRadius, 1);
+  const mass = parseNum(visParams?.massEarth, pr*pr*pr*0.8); // suposición
+  if (planetType === 'Auto') {
+    const densityLike = mass / Math.pow(Math.max(0.5, pr), 3);
+    planetType = densityLike > 0.8 ? 'Rocoso' : 'Gaseoso';
+  }
+
+  // Composiciones y efectos
+  const h2o = clamp01(parseNum(visParams?.h2o, 0));
+  const co2 = clamp01(parseNum(visParams?.co2, 0));
+  const ch4 = clamp01(parseNum(visParams?.ch4, 0));
+  const na = clamp01(parseNum(visParams?.na, 0));
+  const sil = clamp01(parseNum(visParams?.silicates, 0));
+  const clouds = clamp01(parseNum(visParams?.cloudCover, 0.3));
+  const haze = clamp01(parseNum(visParams?.haze, 0.1));
+  const pressure = Math.max(0, parseNum(visParams?.pressureBars, 1));
+  const thickFactor = clamp01(Math.log10(1 + pressure) / 2); // 0..~1
+
+  // Ajustes de color por composición
+  // Agua -> azul; CH4 -> cian; CO2 -> blanquea; Na -> amarillea; Silicatos en calientes -> azulea
+  function shiftColor(hex){
+    let col = hex;
+    col = rgbToHex(
+      ...Object.values(hexToRgb(col))
+    );
+    // aplicar sesgos: construimos un tinte compuesto
+    const mixRgb = {
+      r: clamp01(0.1*na + 0.0*h2o + 0.0*ch4 + (eqT>800?0.05*sil:0)),
+      g: clamp01(0.1*na + 0.1*h2o + 0.2*ch4),
+      b: clamp01(0.0*na + 0.4*h2o + 0.4*ch4 + (eqT>800?0.4*sil:0))
+    };
+    col = tintHex(col, mixRgb, 0.6);
+    // CO2 eleva brillo (desatura)
+    if (co2>0) {
+      const c0 = hexToRgb(col);
+      const k = clamp01(0.3*co2);
+      const r = Math.round(mix(c0.r, 255, k));
+      const g = Math.round(mix(c0.g, 255, k));
+      const b = Math.round(mix(c0.b, 255, k));
+      col = rgbToHex(r,g,b);
+    }
+    return col;
+  }
+  base1 = shiftColor(base1);
+  base2 = shiftColor(base2);
+
+  // Redibujar fondo con shift aplicado
+  const grad2 = ctx.createLinearGradient(0, 0, c.width, 0);
+  grad2.addColorStop(0, base1);
+  grad2.addColorStop(1, base2);
+  ctx.fillStyle = grad2;
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  // Patrón principal: bandas si gaseoso, continentes si rocoso
+  if (planetType === 'Gaseoso') {
+    for (let i = 0; i < 90; i++) {
+      const y = Math.floor((i + 1) * (c.height / 90));
+      const alpha = 0.05 + 0.12*Math.random();
+      const dark = Math.random()<0.5;
+      ctx.fillStyle = dark ? `rgba(0,0,0,${alpha})` : `rgba(255,255,255,${alpha*0.5})`;
+      ctx.fillRect(0, y, c.width, 2 + Math.random()*3);
+    }
+  } else { // Rocoso
+    // Continentes (si hay agua, usar esquema océano + tierra)
+    const oceanBias = h2o>0.3 && exo.insolationFlux ? clamp01(parseNum(exo.insolationFlux,1)) : 0;
+    if (oceanBias>0.2) {
+      // Pintar un mar base
+      ctx.fillStyle = tintHex('#1e6091', starRGB, 0.2);
+      ctx.globalAlpha = 0.35*h2o;
+      ctx.fillRect(0,0,c.width,c.height);
+      ctx.globalAlpha = 1;
+    }
+    // Continentes/placas
+    const landColor = tintHex(eqT<330? '#6c584c' : '#8d5524', starRGB, 0.1);
+    for (let i=0;i<8;i++) {
+      const cx = Math.random()*c.width;
+      const cy = Math.random()*c.height;
+      const r = 60 + Math.random()*160;
+      irregularBlob(ctx, cx, cy, r, landColor);
+    }
+    // Hielos polares si muy frío
+    if (eqT<250) {
+      ctx.fillStyle = 'rgba(255,255,255,0.35)';
+      ctx.fillRect(0, 0, c.width, 40+Math.random()*40);
+      ctx.fillRect(0, c.height-(40+Math.random()*40), c.width, 40+Math.random()*40);
+    }
+  }
+
+  // Nubes según cobertura y presión
+  const cloudIntensity = clamp01(clouds*0.7 + thickFactor*0.6);
+  for (let i = 0; i < Math.floor(400*cloudIntensity); i++) {
+    const x = Math.random() * c.width;
+    const y = Math.random() * c.height;
+    const r = 4 + Math.random() * (planetType==='Gaseoso'?18:10);
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(255,255,255,${0.06 + 0.18*Math.random()*cloudIntensity})`;
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Bruma/haze
+  if (haze>0.01) {
+    const hazeColor = na>0.2 ? '255,225,120' : '200,200,200';
+    ctx.fillStyle = `rgba(${hazeColor},${0.08 + 0.25*haze + 0.2*thickFactor})`;
+    ctx.fillRect(0,0,c.width,c.height);
+  }
+
+  // Tinte adicional por silicato caliente (caso HD 189733b-like)
+  if (sil>0.2 && eqT>800) {
+    ctx.fillStyle = 'rgba(80,140,255,0.10)';
+    ctx.fillRect(0,0,c.width,c.height);
+  }
+
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(1, 1);
+  tex.needsUpdate = true;
+  return tex;
+}
+function applyExoAppearance(p, restore=false) {
+  if (restore) {
+    if (p.originalMaterial) {
+      p.planet.material = p.originalMaterial;
+      p.planet.material.needsUpdate = true;
+    }
+    return;
+  }
+  const { eqT } = approximatePlanetProps(p);
+  const starRGB = typeof starSettings !== 'undefined' ? kelvinToRgb(starSettings.temperature) : {r:1,g:1,b:1};
+  const tex = generatePlanetTextureByParams(eqT, starRGB, exoVisualModel[p.name], p);
+  p.planet.material = new THREE.MeshPhongMaterial({ map: tex });
+  p.planet.material.needsUpdate = true;
+}
+
+// Parámetros visuales por planeta (atmósfera/composición)
+const exoVisualModel = {};
+selectedPlanets.forEach(p => {
+  exoVisualModel[p.name] = {
+    h2o: 0.3,    // 0..1
+    co2: 0.2,
+    ch4: 0.1,
+    na: 0.0,
+    silicates: 0.0,
+    cloudCover: 0.4, // 0..1
+    haze: 0.1,       // 0..1
+    pressureBars: 1, // ~1 bar Tierra
+    massEarth: 1.0,
+    planetType: 'Auto' // Auto/Rocoso/Gaseoso
+  };
+});
+
+const exoAppearanceFolder = gui.addFolder('Apariencia Exoplaneta');
+selectedPlanets.forEach(p => {
+  const state = { usarTextura: false, aplicar: () => { if (state.usarTextura) applyExoAppearance(p); else applyExoAppearance(p, true); } };
+  // Cambiar los nombres en la GUI de apariencia para mostrar Exoplaneta_X
+  let displayName = p.name;
+  if (p.name === 'Venus') displayName = 'Exoplaneta_1';
+  else if (p.name === 'Earth') displayName = 'Exoplaneta_2';
+  else if (p.name === 'Mars') displayName = 'Exoplaneta_3';
+  
+  const f = exoAppearanceFolder.addFolder(displayName);
+  f.add(state, 'usarTextura').name('Usar textura aproximada').onChange(v => { if (v) applyExoAppearance(p); else applyExoAppearance(p, true); });
+  // Controles del modelo visual
+  const vm = exoVisualModel[p.name];
+  f.add(vm, 'planetType', ['Auto','Rocoso','Gaseoso']).name('Tipo de Planeta').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  f.add(vm, 'massEarth', 0.1, 500).name('Masa (M⊕)').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  const comp = f.addFolder('Composición');
+  comp.add(vm, 'h2o', 0, 1, 0.01).name('H2O').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  comp.add(vm, 'co2', 0, 1, 0.01).name('CO2').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  comp.add(vm, 'ch4', 0, 1, 0.01).name('CH4').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  comp.add(vm, 'na', 0, 1, 0.01).name('Sodio').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  comp.add(vm, 'silicates', 0, 1, 0.01).name('Silicatos').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  const atm = f.addFolder('Atmósfera');
+  atm.add(vm, 'pressureBars', 0, 100, 0.1).name('Presión (bar)').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  atm.add(vm, 'cloudCover', 0, 1, 0.01).name('Nubes').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  atm.add(vm, 'haze', 0, 1, 0.01).name('Bruma').onChange(()=>{ if(state.usarTextura) applyExoAppearance(p); });
+  f.add(state, 'aplicar').name('Aplicar');
 });
 
 
@@ -788,19 +1079,19 @@ pointLight.shadow.camera.near = 10;
 pointLight.shadow.camera.far = 20;
 
 //casting and receiving shadows
-earth.planet.castShadow = true;
-earth.planet.receiveShadow = true;
-earth.Atmosphere.castShadow = true;
-earth.Atmosphere.receiveShadow = true;
-earth.moons.forEach(moon => {
+Exoplaneta_2.planet.castShadow = true;
+Exoplaneta_2.planet.receiveShadow = true;
+Exoplaneta_2.Atmosphere.castShadow = true;
+Exoplaneta_2.Atmosphere.receiveShadow = true;
+Exoplaneta_2.moons.forEach(moon => {
 moon.mesh.castShadow = true;
 moon.mesh.receiveShadow = true;
 });
-venus.planet.castShadow = true;
-venus.planet.receiveShadow = true;
-venus.Atmosphere.receiveShadow = true;
-mars.planet.castShadow = true;
-mars.planet.receiveShadow = true;
+Exoplaneta_1.planet.castShadow = true;
+Exoplaneta_1.planet.receiveShadow = true;
+Exoplaneta_1.Atmosphere.receiveShadow = true;
+Exoplaneta_3.planet.castShadow = true;
+Exoplaneta_3.planet.receiveShadow = true;
 
 
 
@@ -809,24 +1100,24 @@ function animate(){
 
   //rotating planets around the sun and itself
   sun.rotateY(0.001 * settings.acceleration);
-  venus.planet.rotateY(0.0005 * settings.acceleration)
-  venus.Atmosphere.rotateY(0.0005 * settings.acceleration);
-  venus.planet3d.rotateY(0.0006 * settings.accelerationOrbit);
-  earth.planet.rotateY(0.005 * settings.acceleration);
-  earth.Atmosphere.rotateY(0.001 * settings.acceleration);
-  earth.planet3d.rotateY(0.001 * settings.accelerationOrbit);
-  mars.planet.rotateY(0.01 * settings.acceleration);
-  mars.planet3d.rotateY(0.0007 * settings.accelerationOrbit);
+  Exoplaneta_1.planet.rotateY(0.0005 * settings.acceleration)
+  Exoplaneta_1.Atmosphere.rotateY(0.0005 * settings.acceleration);
+  Exoplaneta_1.planet3d.rotateY(0.0006 * settings.accelerationOrbit);
+  Exoplaneta_2.planet.rotateY(0.005 * settings.acceleration);
+  Exoplaneta_2.Atmosphere.rotateY(0.001 * settings.acceleration);
+  Exoplaneta_2.planet3d.rotateY(0.001 * settings.accelerationOrbit);
+  Exoplaneta_3.planet.rotateY(0.01 * settings.acceleration);
+  Exoplaneta_3.planet3d.rotateY(0.0007 * settings.accelerationOrbit);
 
 // Animate Earth's moon
-if (earth.moons) {
-  earth.moons.forEach(moon => {
+if (Exoplaneta_2.moons) {
+  Exoplaneta_2.moons.forEach(moon => {
     const time = performance.now();
     const tiltAngle = 5 * Math.PI / 180;
 
-    const moonX = earth.planet.position.x + moon.orbitRadius * Math.cos(time * moon.orbitSpeed);
+    const moonX = Exoplaneta_2.planet.position.x + moon.orbitRadius * Math.cos(time * moon.orbitSpeed);
     const moonY = moon.orbitRadius * Math.sin(time * moon.orbitSpeed) * Math.sin(tiltAngle);
-    const moonZ = earth.planet.position.z + moon.orbitRadius * Math.sin(time * moon.orbitSpeed) * Math.cos(tiltAngle);
+    const moonZ = Exoplaneta_2.planet.position.z + moon.orbitRadius * Math.sin(time * moon.orbitSpeed) * Math.cos(tiltAngle);
 
     moon.mesh.position.set(moonX, moonY, moonZ);
     moon.mesh.rotateY(0.01);
@@ -838,9 +1129,9 @@ marsMoons.forEach(moon => {
   if (moon.mesh) {
     const time = performance.now();
 
-    const moonX = mars.planet.position.x + moon.orbitRadius * Math.cos(time * moon.orbitSpeed);
+    const moonX = Exoplaneta_3.planet.position.x + moon.orbitRadius * Math.cos(time * moon.orbitSpeed);
     const moonY = moon.orbitRadius * Math.sin(time * moon.orbitSpeed);
-    const moonZ = mars.planet.position.z + moon.orbitRadius * Math.sin(time * moon.orbitSpeed);
+    const moonZ = Exoplaneta_3.planet.position.z + moon.orbitRadius * Math.sin(time * moon.orbitSpeed);
 
     moon.mesh.position.set(moonX, moonY, moonZ);
     moon.mesh.rotateY(0.001);
@@ -869,10 +1160,10 @@ if (intersects.length > 0) {
   const intersectedObject = intersects[0].object;
 
   // If the intersected object is an atmosphere, find the corresponding planet
-  if (intersectedObject === earth.Atmosphere) {
-    outlinePass.selectedObjects = [earth.planet];
-  } else if (intersectedObject === venus.Atmosphere) {
-    outlinePass.selectedObjects = [venus.planet];
+  if (intersectedObject === Exoplaneta_2.Atmosphere) {
+    outlinePass.selectedObjects = [Exoplaneta_2.planet];
+  } else if (intersectedObject === Exoplaneta_1.Atmosphere) {
+    outlinePass.selectedObjects = [Exoplaneta_1.planet];
   } else {
     // For other planets, outline the intersected object itself
     outlinePass.selectedObjects = [intersectedObject];
@@ -915,40 +1206,3 @@ window.addEventListener('resize', function(){
   renderer.setSize(window.innerWidth,window.innerHeight);
   composer.setSize(window.innerWidth,window.innerHeight);
 });
-
-
-// /solar-system/main.js (o el archivo principal de tu simulación)
-
-// 1. Define la función para obtener los datos
-async function cargarDatosDeFlask() {
-    console.log('Solicitando datos de planetas a Flask...');
-    
-    try {
-        // La URL completa al servidor de Flask
-        const response = await fetch('http://localhost:5000/api/datos_planetas'); 
-        
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        return data.planetas; // Por ejemplo, solo devolvemos la lista de planetas
-        
-    } catch (error) {
-        console.error('⚠️ ¡Hubo un problema al conectar con Flask!', error);
-        // Puedes devolver datos por defecto o null si la conexión falla
-        return ["Tierra", "Luna"]; 
-    }
-}
-
-// 2. Inicializa la simulación y llama a la función
-async function inicializarSimulacion() {
-    const planetas = await cargarDatosDeFlask();
-    
-    console.log('Simulación inicializada con:', planetas);
-    
-    // Aquí iría el código para crear tu escena 3D, agregar los planetas, etc.
-    // Ej: crearPlaneta(planetas[0]);
-}
-
-inicializarSimulacion(); // ¡Llama a la función principal para que todo comience!
