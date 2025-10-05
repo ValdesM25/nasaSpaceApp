@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score 
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from util.features import create_efficient_features
+from ml.util.features import create_efficient_features
 import warnings
 warnings.filterwarnings('ignore')
 

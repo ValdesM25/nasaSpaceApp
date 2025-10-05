@@ -18,6 +18,7 @@ models = {
 def predict_exoplanet(df, model_name):
     # Generate additional features
     df = create_efficient_features(df)
+    df = df.drop(columns=['transit_depth.1', 'category'])
 
     # Scale data
     X_scaled = scaler.transform(df)

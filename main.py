@@ -1,11 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pandas as pd
 import io
 
 from server.memory import retornodf
 from ml.inference import predict_exoplanet
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder="server/templates",  # relative path from run.py
+    static_folder="server/static"        # relative path from run.py
+)
 
 # login
 @app.route("/")
@@ -52,7 +56,7 @@ def predict():
         df_almacenado = df
         print(df_almacenado)
 
-        res = predict_exoplanet(df_almacenado)
+        res = predict_exoplanet(df_almacenado, 'random_forest')
         retornodf = res
         # ####################################################
         # llamar al modelo
