@@ -915,3 +915,40 @@ window.addEventListener('resize', function(){
   renderer.setSize(window.innerWidth,window.innerHeight);
   composer.setSize(window.innerWidth,window.innerHeight);
 });
+
+
+// /solar-system/main.js (o el archivo principal de tu simulación)
+
+// 1. Define la función para obtener los datos
+async function cargarDatosDeFlask() {
+    console.log('Solicitando datos de planetas a Flask...');
+    
+    try {
+        // La URL completa al servidor de Flask
+        const response = await fetch('http://localhost:5000/api/datos_planetas'); 
+        
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data.planetas; // Por ejemplo, solo devolvemos la lista de planetas
+        
+    } catch (error) {
+        console.error('⚠️ ¡Hubo un problema al conectar con Flask!', error);
+        // Puedes devolver datos por defecto o null si la conexión falla
+        return ["Tierra", "Luna"]; 
+    }
+}
+
+// 2. Inicializa la simulación y llama a la función
+async function inicializarSimulacion() {
+    const planetas = await cargarDatosDeFlask();
+    
+    console.log('Simulación inicializada con:', planetas);
+    
+    // Aquí iría el código para crear tu escena 3D, agregar los planetas, etc.
+    // Ej: crearPlaneta(planetas[0]);
+}
+
+inicializarSimulacion(); // ¡Llama a la función principal para que todo comience!
