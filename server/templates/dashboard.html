@@ -112,12 +112,19 @@
   <!-- ============================= -->
   <!-- ============================= -->
   <!-- boton circular p/home -->
-  <div class="relative w-full h-8 bg-white-100">
-      <!-- Círculo con icono -->
-      <div class="absolute bottom-8 left-6 w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-white transition transform hover:scale-105 cursor-pointer">
+  <div id="botonInicio" class="relative w-full h-8 bg-white-100">
+    <!-- Círculo con icono -->
+    <div class="absolute bottom-8 left-6 w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-white transition transform hover:scale-105 cursor-pointer">
       <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Icono" class="w-10 h-10">
     </div>
-</div>
+    <script>
+      const botonInicio = document.getElementById('botonInicio');
+      botonInicio.addEventListener('click', (el) => {
+        el.preventDefault();
+        window.location.href = "/inicio"; // Redirects relative to the domain root
+      });
+    </script>
+  </div>
 
   <!-- ============================= -->
   <!-- ============================= -->
