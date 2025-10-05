@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import json
@@ -6,10 +7,12 @@ from datetime import datetime
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score 
+from sklearn.metrics import accuracy_score, classification_report
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
-from ml.util.features import create_efficient_features
+import shap
+import matplotlib.pyplot as plt
+import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -23,6 +26,22 @@ labeled_data = data[data['category'].isin(['CONFIRMED', 'FALSE POSITIVE'])].copy
 
 le = LabelEncoder()
 labeled_data['target'] = le.fit_transform(labeled_data['category'])
+
+# ======================================================
+# 2. Feature engineering
+# ======================================================
+
+def create_efficient_features(df):
+    df_eff = df.copy()
+    df_eff['period_duration_ratio'] = df_eff['transit_period'] / (df_eff['transit_duration'] + 0.001)
+    df_eff['snr_approximation'] = df_eff['transit_depth'] / (df_eff['transit_duration'] + 1)
+    expected_depth = (df_eff['planet_radius'] / df_eff['star_radius']) ** 2 * 1e6
+    df_eff['depth_discrepancy'] = (df_eff['transit_depth'] - expected_depth) / (expected_depth + 1)
+    df_eff['star_luminosity'] = (df_eff['star_radius'] ** 2) * (df_eff['star_temperature'] / 5778) ** 4
+    df_eff['transit_probability'] = df_eff['star_radius'] / (df_eff['transit_period'] ** (2/3) + 0.001)
+    df_eff['log_transit_depth'] = np.log1p(df_eff['transit_depth'])
+    df_eff['log_transit_period'] = np.log1p(df_eff['transit_period'])
+    return df_eff
 
 labeled_data_eff = create_efficient_features(labeled_data)
 
@@ -48,17 +67,11 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Guardar scaler
 joblib.dump(scaler, 'ml/models/scaler.pkl')
 
-print(f"Entrenamiento: {X_train_scaled.shape}")
-print(f"Prueba: {X_test_scaled.shape}")
-
 # ======================================================
-# 4. Definir y entrenar modelos
+# 4. Definir modelos
 # ======================================================
-
-print("\nEntrenando modelos rápidos...")
 
 xgb_fast = XGBClassifier(
     n_estimators=150,
@@ -94,11 +107,22 @@ models = {
 }
 
 # ======================================================
-# 5. Entrenamiento + evaluación + guardado
+# 5. Crear carpeta para gráficos SHAP
+# ======================================================
+
+shap_folder = 'ml/models/shap_plots'
+os.makedirs(shap_folder, exist_ok=True)
+
+# ======================================================
+# 6. Entrenamiento + evaluación + SHAP + guardado
 # ======================================================
 
 results = {}
 timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
+sns.set_style("whitegrid")  # Estilo seaborn
+plt.rcParams["figure.figsize"] = (12, 8)  # Tamaño de gráficos grande
+plt.rcParams["font.size"] = 14
 
 for name, model in models.items():
     print(f"\n🔹 Entrenando {name}...")
@@ -110,32 +134,72 @@ for name, model in models.items():
     model_path = f"ml/models/{name.lower().replace(' ', '_')}_model.pkl"
     joblib.dump(model, model_path)
 
-    # Guardar resultado
+    # Generar classification report
+    report = classification_report(
+        y_test, y_pred,
+        target_names=['FALSE POSITIVE', 'CONFIRMED'],
+        output_dict=True
+    )
+
     results[name] = {
         "accuracy": round(acc, 4),
-        "accuracy_percent": round(acc * 100, 2),
+        "accuracy_percent": round(acc*100, 2),
         "model_path": model_path,
         "train_size": len(y_train),
         "test_size": len(y_test),
+        "classification_report": report,
         "timestamp": timestamp
     }
 
     print(f"✅ {name} guardado ({acc*100:.2f}% accuracy)")
+    print(classification_report(y_test, y_pred, target_names=['FALSE POSITIVE', 'CONFIRMED']))
+
+    # ======================================================
+    # Generar gráficos SHAP con nombres reales de features
+    # ======================================================
+    explainer = shap.Explainer(model, X_train_scaled, feature_names=features)
+    shap_values_all = explainer(X_test_scaled, check_additivity=False)
+
+    # Handle binary classifiers: get the positive class Explanation
+    if isinstance(shap_values_all, list):
+        # shap_values_all[1] = Explanation for class 1
+        shap_values_to_plot = shap_values_all[1]
+    else:
+        shap_values_to_plot = shap_values_all
+
+    # Ensure we have multiple samples
+    if shap_values_to_plot.shape[0] < 2:
+        print(f"⚠️ Skipping SHAP plot for {name}: not enough samples")
+    else:
+        # Beeswarm plot
+        plt.figure()
+        shap.plots.beeswarm(shap_values_to_plot, max_display=15, show=False)
+        plt.title(f"{name} - SHAP Summary", fontsize=18)
+        plt.tight_layout()
+        plt.savefig(os.path.join(shap_folder, f"{name}_shap_summary.png"), dpi=300)
+        plt.close()
+
+        # Feature importance (bar plot)
+        plt.figure()
+        shap.plots.bar(shap_values_to_plot, max_display=15, show=False)
+        plt.title(f"Random Forest - SHAP Feature Importance", fontsize=18)
+        plt.tight_layout()
+        plt.savefig(os.path.join(shap_folder, f"{name}_shap_bar.png"), dpi=300)
+        plt.close()
+
+
 
 # ======================================================
-# 6. Guardar resultados en JSON y CSV
+# 7. Guardar resultados en JSON y CSV
 # ======================================================
 
-results_path_json = f"ml/models/results_log/model_results_{timestamp}.json"
-results_path_csv = f"ml/models/results_log/model_results_{timestamp}.csv"
+results_path_json = f"ml/models/model_results_{timestamp}.json"
+results_path_csv = f"ml/models/model_results_{timestamp}.csv"
 
-# JSON
 with open(results_path_json, 'w') as f:
     json.dump(results, f, indent=4)
 
-# CSV
 results_df = pd.DataFrame(results).T
 results_df.to_csv(results_path_csv)
 
-print(f"\nResultados guardados en:\n  - {results_path_json}\n  - {results_path_csv}")
-print("\nEntrenamiento y guardado completado.")
+print(f"\nResultados y gráficos guardados en:\n  - {results_path_json}\n  - {results_path_csv}\n  - {shap_folder}")
