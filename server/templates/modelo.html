@@ -122,7 +122,7 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
   </header>
 
     <button class="nuevo-proyecto" onclick="nuevoProyecto()">
-    <span class="text">Nuevo Proyectoo</span>
+    <span class="text">Nuevo Proyecto</span>
   </button>
 
   <h2 style="color:white; margin-top:24px;">Modelos</h2>
@@ -132,7 +132,13 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
       <div class="first-content"><span>Random Forest</span></div>
       <div class="second-content">
         <span>Descripción</span>
-        <button class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <button id="botonRandomF"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <script>const botonRandomF = document.getElementById('botonRandomF')
+          botonRandomF.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dasboard"
+          });
+        </script>
       </div>
     </div>
 
@@ -140,7 +146,13 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
       <div class="first-content"><span>Deep Learning</span></div>
       <div class="second-content">
         <span>Descripción</span>
-        <button class="btn-select" onclick="seleccionarModelo('Deep Learning')">Seleccionar</button>
+        <button id="botonDeepL"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <script>const botonDeepL = document.getElementById('botonDeepL')
+          botonDeepL.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dashboard"
+          });
+        </script>
       </div>
     </div>
 
@@ -148,7 +160,13 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
       <div class="first-content"><span>XGBoost</span></div>
       <div class="second-content">
         <span>Descripción</span>
-        <button class="btn-select" onclick="seleccionarModelo('XGBoost')">Seleccionar</button>
+        <button id="botonXGB"="btn-select" onclick="seleccionarModelo('XGBoost')">Seleccionar</button>
+        <script>const botonXGB = document.getElementById('botonXGB')
+          botonXGB.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dashboard"
+          });
+        </script>
       </div>
     </div>
   </div>
