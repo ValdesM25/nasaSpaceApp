@@ -3,86 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hoja de Datos Interactiva de Exoplanetas</title>
+    <title>Generador de Mapas de Exoplanetas</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background-color: #f4f7f6;
-            color: #333;
-        }
-        h1 {
-            color: #d9534f; /* Rojo/Naranja */
-            text-align: center;
-            border-bottom: 2px solid #d9534f;
-            padding-bottom: 10px;
-            margin-bottom: 30px;
-        }
-        h2 {
-            color: #3f51b5; /* Azul oscuro */
-            margin-top: 25px;
-            padding-left: 10px;
-            border-left: 4px solid #3f51b5;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        tr:nth-child(even) {
-            background-color: #f8f8f8;
-        }
-        .units-col {
-            width: 15%;
-            text-align: center;
-            color: #555;
-        }
-        .value-col {
-            width: 30%;
-            text-align: center;
-        }
-        .value-col input {
-            width: 90%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            text-align: center;
-        }
-        .example-box {
-            background-color: #ffedcc; /* Fondo claro para el ejemplo */
-            border: 1px solid #ffcc66;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; background-color: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        h1 { color: #d9534f; text-align: center; border-bottom: 2px solid #d9534f; padding-bottom: 10px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #007bff; color: white; font-weight: 600; text-transform: uppercase; }
+        tr:nth-child(even) { background-color: #f8f8f8; }
+        .units-col { width: 15%; text-align: center; color: #555; }
+        .value-col input, #planetName { width: 90%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; text-align: center; }
+        .category-header { background-color: #3f51b5; color: white; text-align: center; font-weight: bold; }
+        .action-area { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px dashed #ccc; }
+        .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin: 5px; }
+        #sendBtn { background-color: #5cb85c; color: white; }
+        #sendBtn:hover { background-color: #4cae4c; }
+        #generateBtn { background-color: #f0ad4e; color: white; }
+        #generateBtn:hover { background-color: #ec971f; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        .message-box { padding: 10px; margin: 15px 0; border-radius: 5px; font-weight: bold; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Hoja de Caracterización de Exoplanetas</h1>
-
+    <h1>Generador de Mapas de Exoplanetas</h1>
     <div class="example-box">
         <h2>Ejemplo (Tierra Caliente - Kepler-10b)</h2>
         <p>Los siguientes valores de muestra corresponden a un planeta tipo **Súper-Tierra** que orbita muy cerca de su estrella, resultando en una temperatura extremadamente alta.</p>
@@ -93,81 +41,141 @@
         </ul>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Parámetro</th>
-                <th class="units-col">Unidad/Símbolo</th>
-                <th class="value-col">Valor para Ingresar</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td colspan="3" style="background-color: #3f51b5; color: white; text-align: center; font-weight: bold;">PROPIEDADES DEL PLANETA (Derivadas)</td></tr>
-            
-            <tr>
-                <td>6. Planetary Radius (Radio Planetario)</td>
-                <td class="units-col">$R_p$ / $R_\oplus$</td>
-                <td class="value-col"><input type="text" value="1.47" placeholder="e.g., 1.47"></td>
-            </tr>
-            <tr>
-                <td>7. Equilibrium Temperature (Temp. de Equilibrio)</td>
-                <td class="units-col">$T_{eq}$ (K)</td>
-                <td class="value-col"><input type="text" value="2000" placeholder="e.g., 2000"></td>
-            </tr>
-            <tr>
-                <td>8. Insolation Flux (Flujo de Insolación)</td>
-                <td class="units-col">$F_{p}$ ($W/m^2$)</td>
-                <td class="value-col"><input type="text" value="1.5 × 10⁶" placeholder="e.g., 1.5e6"></td>
-            </tr>
+    <form id="exoplanetForm" method="POST" action="/generar">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <label for="planetName">Nombre del Exoplaneta:</label>
+            <input type="text" id="planetName" name="planetName" value="KOI-961 b" placeholder="Ej: Kepler-186f" required>
+        </div>
 
-            <tr><td colspan="3" style="background-color: #3f51b5; color: white; text-align: center; font-weight: bold;">PARÁMETROS DEL TRÁNSITO (Observables)</td></tr>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parámetro</th>
+                    <th class="units-col">Unidad</th>
+                    <th class="value-col">Valor</th>
+                </tr>
+            </thead>
+            <tbody id="paramsTable">
+                <tr><td colspan="3" class="category-header">PROPIEDADES DE LA ESTRELLA (Necesario para el cálculo)</td></tr>
+                <tr>
+                    <td>9. Stellar Effective Temperature</td>
+                    <td class="units-col">K</td>
+                    <td class="value-col"><input type="number" id="stellar_eff_temp_k" name="stellar_effective_temp_k" value="3000" step="10" required></td>
+                </tr>
+                <tr>
+                    <td>11. Stellar Radius</td>
+                    <td class="units-col">$R_\odot$</td>
+                    <td class="value-col"><input type="number" id="stellar_radius_sol" name="stellar_radius_sol" value="0.16" step="0.01" required></td>
+                </tr>
+                
+                <tr><td colspan="3" class="category-header">PARÁMETROS DEL TRÁNSITO (Necesario para el cálculo)</td></tr>
+                <tr>
+                    <td>5. Transit Depth</td>
+                    <td class="units-col">ppm</td>
+                    <td class="value-col"><input type="number" id="transit_depth_ppm" name="transit_depth_ppm" value="260" step="1" required></td>
+                </tr>
+
+                <tr><td colspan="3" class="category-header">PROPIEDADES DERIVADAS (Se actualizan al enviar especificaciones)</td></tr>
+                <tr>
+                    <td>6. Planetary Radius</td>
+                    <td class="units-col">$R_\oplus$</td>
+                    <td class="value-col"><input type="text" id="planetary_radius_earth" value="-" disabled></td>
+                </tr>
+                <tr>
+                    <td>7. Equilibrium Temperature</td>
+                    <td class="units-col">K</td>
+                    <td class="value-col"><input type="text" id="eq_temp_k" value="-" disabled></td>
+                </tr>
+                
+                <tr><td colspan="3" class="category-header">OTROS PARÁMETROS (Solo Referencia)</td></tr>
+                <tr>
+                    <td>1. Koi Period / Orbital Period</td>
+                    <td class="units-col">días</td>
+                    <td class="value-col"><input type="number" id="koi_period_days" value="0.45" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>2. Transit Epoch ($T_0$)</td>
+                    <td class="units-col">BJD</td>
+                    <td class="value-col"><input type="number" id="transit_epoch" value="2454964.0" step="0.1"></td>
+                </tr>
+                <tr>
+                    <td>3. Impact Parameter</td>
+                    <td class="units-col">b</td>
+                    <td class="value-col"><input type="number" id="impact_parameter" value="0.67" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>4. Transit Duration</td>
+                    <td class="units-col">horas</td>
+                    <td class="value-col"><input type="number" id="transit_duration" value="3.05" step="0.01"></td>
+                </tr>
+                <tr>
+                    <td>8. Insolation Flux</td>
+                    <td class="units-col">$F_{p}$</td>
+                    <td class="value-col"><input type="text" id="insolation_flux" value="N/A" disabled></td>
+                </tr>
+                <tr>
+                    <td>10. Stellar Surface Gravity</td>
+                    <td class="units-col">log $g$</td>
+                    <td class="value-col"><input type="number" id="stellar_surface_gravity" value="4.8" step="0.01"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="action-area">
+            <button type="button" class="btn" id="sendBtn" onclick="sendSpecifications()">
+                Enviar Especificaciones (Calcular R y T)
+            </button>
             
-            <tr>
-                <td>1. Koi Period / Orbital Period (Período Orbital)</td>
-                <td class="units-col">P (días)</td>
-                <td class="value-col"><input type="text" value="0.84" placeholder="e.g., 0.84"></td>
-            </tr>
-            <tr>
-                <td>2. Transit Epoch (Época del Tránsito)</td>
-                <td class="units-col">$T_0$ (BJD)</td>
-                <td class="value-col"><input type="text" value="2454964.755" placeholder="e.g., 2454964.755"></td>
-            </tr>
-            <tr>
-                <td>3. Impact Parameter (Parámetro de Impacto)</td>
-                <td class="units-col">b ($R_*$)</td>
-                <td class="value-col"><input type="text" value="0.67" placeholder="e.g., 0.67"></td>
-            </tr>
-            <tr>
-                <td>4. Transit Duration (Duración del Tránsito)</td>
-                <td class="units-col">$T_{14}$ (horas)</td>
-                <td class="value-col"><input type="text" value="3.05" placeholder="e.g., 3.05"></td>
-            </tr>
-            <tr>
-                <td>5. Transit Depth (Profundidad del Tránsito)</td>
-                <td class="units-col">$(R_p/R_*)^2$ (ppm)</td>
-                <td class="value-col"><input type="text" value="620" placeholder="e.g., 620"></td>
-            </tr>
-            
-            <tr><td colspan="3" style="background-color: #3f51b5; color: white; text-align: center; font-weight: bold;">PROPIEDADES DE LA ESTRELLA (Huésped)</td></tr>
-            
-            <tr>
-                <td>9. Stellar Effective Temperature (Temp. Efectiva Estelar)</td>
-                <td class="units-col">$T_{eff}$ (K)</td>
-                <td class="value-col"><input type="text" value="5620" placeholder="e.g., 5620"></td>
-            </tr>
-            <tr>
-                <td>10. Stellar Surface Gravity (Gravedad Superficial Estelar)</td>
-                <td class="units-col">log $g_*$</td>
-                <td class="value-col"><input type="text" value="4.4" placeholder="e.g., 4.4"></td>
-            </tr>
-            <tr>
-                <td>11. Stellar Radius (Radio Estelar)</td>
-                <td class="units-col">$R_*$ / $R_\odot$</td>
-                <td class="value-col"><input type="text" value="1.06" placeholder="e.g., 1.06"></td>
-            </tr>
-        </tbody>
-    </table>
+            <button type="submit" class="btn" id="generateBtn">
+                Generar Imagen
+            </button>
+        </div>
+    </form>
 </div>
 
+<script>
+    const DEFAULT_DATA = {
+        stellar_effective_temp_k: 3000,
+        stellar_radius_sol: 0.16,
+        transit_depth_ppm: 260
+    };
+
+    // Función para enviar datos esenciales al servidor Python (Flask) vía AJAX
+    function sendSpecifications() {
+        const data = {
+            transit_depth_ppm: document.getElementById('transit_depth_ppm').value,
+            stellar_radius_sol: document.getElementById('stellar_radius_sol').value,
+            stellar_effective_temp_k: document.getElementById('stellar_eff_temp_k').value
+        };
+
+        // Enviar datos a la ruta /calcular en Flask
+        fetch('/calcular', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                document.getElementById('planetary_radius_earth').value = result.radius_earth;
+                document.getElementById('eq_temp_k').value = result.temp_k;
+                alert(`Especificaciones enviadas y calculadas. R: ${result.radius_earth}, T: ${result.temp_k} K.`);
+            } else {
+                alert('Error al calcular: ' + result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error de red o servidor:', error);
+            alert('Error de conexión con el servidor. Asegúrate de que Flask esté corriendo.');
+        });
+    }
+
+    // Inicializar los campos con los valores del ejemplo al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('stellar_eff_temp_k').value = DEFAULT_DATA.stellar_effective_temp_k;
+        document.getElementById('stellar_radius_sol').value = DEFAULT_DATA.stellar_radius_sol;
+        document.getElementById('transit_depth_ppm').value = DEFAULT_DATA.transit_depth_ppm;
+    });
+</script>
 </body>
 </html>

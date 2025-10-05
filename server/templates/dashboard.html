@@ -40,30 +40,44 @@
                     <canvas id="myPieChart"></canvas>
                 </div>
 
-                <div class="sub-grid">
-                    <div class="card">
-                        <h3 class="accent-teal">Predict with CSV</h3>
-                        <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
-                        
-                        <form id="predict-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
-                            
-                            <input type="hidden" name="modelo_seleccionado" value="{{ modelo_seleccionado }}">
-                            
-                            <input type="file" id="csv-input" name="csvfile" style="display: none;" accept=".csv">
-                            <button type="button" id="csv-button" class="btn btn-teal">
-                                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
-                                Upload CSV
-                            </button>
-                            <span id="file-name-display" class="muted" style="margin-left: 16px;"></span>
-                        </form>
-                    </div>
+               <div class="card">
+    <h3 class="accent-teal">Predict</h3>
+    <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view, or try a single prediction.</p>
+    
+    <form id="predict-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+        
+        <input type="hidden" name="modelo_seleccionado" value="{{ modelo_seleccionado }}">
+        
+        <input type="file" id="csv-input" name="csvfile" style="display: none;" accept=".csv">
+
+        <div class="btn-wrapper">
+            <button type="button" id="upload-csv-button" class="btn btn-teal">
+                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                Upload CSV
+            </button>
+            
+            <button type="button" id="single-predict-button" class="btn btn-teal">
+                <i class="fa-solid fa-keyboard" style="margin-right: 8px;"></i>
+                Try a Single One
+            </button>
+        </div>
+
+        <span id="file-name-display" class="muted" style="margin-top: 16px; display: block;"></span>
+    </form>
+</div>
 
                     <div class="card">
                         <h3 class="accent-red">Train</h3>
+                        <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
                         <div class="btn-wrapper">
-                            <button class="btn btn-red">CSV</button>
+                            <button type="button" id="csv-button" class="btn btn-red">
+                                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                                Upload CSV
+                            </button>
                         </div>
                     </div>
+
+
                 </div>
             </aside>
         </div>
@@ -123,6 +137,21 @@
             }
         });
     </script>
+
+<script>
+    // 1. Selecciona el botón visible que el usuario va a presionar.
+    const uploadButton = document.getElementById('upload-csv-button');
+
+    // 2. Selecciona el campo de archivo oculto que tiene la funcionalidad.
+    const fileInput = document.getElementById('csv-input');
+
+    // 3. Cuando se haga clic en el botón visible...
+    uploadButton.addEventListener('click', function() {
+        // 4. ...simula un clic en el campo de archivo oculto.
+        fileInput.click();
+    });
+</script>
+
 </body>
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </html>
