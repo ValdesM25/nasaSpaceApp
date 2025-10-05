@@ -14,37 +14,67 @@
   <div class="container">
     <header>
       <h1>New <span class="accent">Project</span></h1>
-      <button id="botonComunidad" class="btn btn-secondary profile-btn">A</button>
+      <button id="botonComunidad" class="btn btn-secondary profile-btn" ><i class="fa-solid fa-user-astronaut"></i></button>
     </header>
+
+
 
     <button class="nuevo-proyecto btn btn-primary">
       <i class="fa-solid " style="margin-right: 8px;"></i>
       <span>Model Selection</span>
     </button>
 
-    <h2>Models</h2>
-    <div class="templates" role="list">
-        <div class="card model-card">
-          <div class="first-content"><span>Random Forest</span></div>
-          <div class="second-content"><span>Ensemble of decision trees for classification/regression</span><button class="btn btn-primary">Select</button></div>
-        </div>
-        <div class="card model-card">
-          <div class="first-content"><span>Deep Learning</span></div>
-          <div class="second-content"><span>Multi-layered neural networks for complex pattern recognition</span><button class="btn btn-primary">Select</button></div>
-        </div>
-        <div class="card model-card">
-          <div class="first-content"><span>XGBoost</span></div>
-          <div class="second-content"><span>A high-performance, optimized gradient boosting framework</span><button class="btn btn-primary">Select</button></div>
-        </div>
-        <div class="card model-card">
-          <div class="first-content"><span>Linear Regression</span></div>
-          <div class="second-content"><span>Predicting continuous values by fitting a straight line</span><button class="btn btn-primary">Select</button></div>
-        </div>
-        <div class="card model-card">
-          <div class="first-content"><span>K-Means</span></div>
-          <div class="second-content"><span>An unsupervised algorithm that groups data into K clusters</span><button class="btn btn-primary">Select</button></div>
-        </div>
+
+
+<h2>Models</h2>
+<div class="templates" role="list">
+    <div class="card model-card">
+      <div class="first-content" id="rf-card">
+        <span>Random Forest</span>
+      </div>
+      <div class="second-content">
+        <span>Ensemble of decision trees for classification/regression</span>
+        <button class="btn btn-primary">Select</button>
+      </div>
     </div>
+    <div class="card model-card">
+      <div class="first-content" id="dl-card">
+        <span>Deep Learning</span>
+      </div>
+      <div class="second-content">
+        <span>Multi-layered neural networks for complex pattern recognition</span>
+        <button class="btn btn-primary">Select</button>
+      </div>
+    </div>
+    <div class="card model-card">
+      <div class="first-content" id="xgb-card">
+        <span>XGBoost</span>
+      </div>
+      <div class="second-content">
+        <span>A high-performance, optimized gradient boosting framework</span>
+        <button class="btn btn-primary">Select</button>
+      </div>
+    </div>
+    <div class="card model-card">
+       <div class="first-content" id="lr-card">
+        <span>Linear Regression</span>
+      </div>
+      <div class="second-content">
+        <span>Predicting continuous values by fitting a straight line</span>
+        <button class="btn btn-primary">Select</button>
+      </div>
+    </div>
+    <div class="card model-card">
+       <div class="first-content" id="km-card">
+        <span>K-Means</span>
+      </div>
+      <div class="second-content">
+        <span>An unsupervised algorithm that groups data into K clusters</span>
+        <button class="btn btn-primary">Select</button>
+      </div>
+    </div>
+    
+</div>
 
 <div class="content-wrapper">
     <section class="card">
