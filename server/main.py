@@ -20,6 +20,9 @@ def modelo(nombre_modelo):
     # Pasamos la variable 'nombre_modelo' al template de dashboard.html
     # Dentro del HTML, podrás acceder a ella usando {{ modelo_seleccionado }}
     return render_template("dashboard.html", modelo_seleccionado=nombre_modelo)
+
+
+
 # --- RUTA /predict MODIFICADA ---
 @app.route('/predict', methods=['POST'])
 def predict():

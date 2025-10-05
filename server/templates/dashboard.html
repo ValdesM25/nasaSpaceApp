@@ -42,7 +42,7 @@
 
                 <div class="sub-grid">
                     <div class="card">
-                        <h3 class="accent-teal">Predict with CSV</h3>
+                        <h3 class="accent-teal">Predict</h3>
                         <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
                         
                         <form id="predict-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
@@ -54,14 +54,22 @@
                                 <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
                                 Upload CSV
                             </button>
-                            <span id="file-name-display" class="muted" style="margin-left: 16px;"></span>
+                            <button type="button" id="csv-button" class="btn btn-teal">
+                                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                                Try a Single One!
+                            </button>
+                            <span id="file-name-display" class="muted" style="margin-left:  16px;"></span>
                         </form>
                     </div>
 
                     <div class="card">
                         <h3 class="accent-red">Train</h3>
+                        <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
                         <div class="btn-wrapper">
-                            <button class="btn btn-red">CSV</button>
+                            <button type="button" id="csv-button" class="btn btn-red">
+                                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                                Upload CSV
+                            </button>
                         </div>
                     </div>
                 </div>
