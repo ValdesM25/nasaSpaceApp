@@ -76,6 +76,8 @@
                             </button>
                         </div>
                     </div>
+
+
                 </div>
             </aside>
         </div>
@@ -135,6 +137,21 @@
             }
         });
     </script>
+
+<script>
+    // 1. Selecciona el botón visible que el usuario va a presionar.
+    const uploadButton = document.getElementById('upload-csv-button');
+
+    // 2. Selecciona el campo de archivo oculto que tiene la funcionalidad.
+    const fileInput = document.getElementById('csv-input');
+
+    // 3. Cuando se haga clic en el botón visible...
+    uploadButton.addEventListener('click', function() {
+        // 4. ...simula un clic en el campo de archivo oculto.
+        fileInput.click();
+    });
+</script>
+
 </body>
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </html>
