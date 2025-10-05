@@ -18,21 +18,25 @@ models = {
 }
 
 def predict_exoplanet(df, model_name):
-    # Generate additional features
+    # Generar características adicionales
     df = create_efficient_features(df)
-    df = df.drop(columns=['transit_depth.1', 'category'])
 
-    # Scale data
+    # Eliminar columnas no deseadas si existen
+    for col in ['transit_depth.1', 'category']:
+        if col in df.columns:
+            df = df.drop(columns=[col])
+
+    # Escalar datos
     X_scaled = scaler.transform(df)
 
-
-    # Verify that model exists
+    # Verificar modelo
     if model_name not in models:
         raise ValueError(f"Model '{model_name}' not found. Available: {list(models.keys())}")
 
-    # Obtain model
+    # Obtener modelo
     model = models[model_name]
 
+<<<<<<< HEAD
     #Interpretavilidad
 
     # Calcular SHAP values
@@ -41,14 +45,35 @@ def predict_exoplanet(df, model_name):
     # Predict
     prob = model.predict_proba(X_scaled)[0][1]
     label = int(prob > 0.5)
+=======
+    # --- PREDECIR ---
+    probs = model.predict_proba(X_scaled)[:, 1]       # probabilidades clase positiva
+    labels = (probs > 0.5).astype(int)                # etiquetas binarias
+>>>>>>> 71784c14add8b95b14010450c0660830b1022097
 
-    # Results
-    result = {
+    # Si solo hay una fila → devolver resultado individual
+    if len(df) == 1:
+        return {
+            "model": model_name,
+            "probability_confirmed": float(probs[0]),
+            "prediction": "CONFIRMED" if labels[0] == 1 else "FALSE POSITIVE"
+        }
+
+    # Si hay múltiples filas → devolver lista de resultados
+    results = []
+    for i, (p, l) in enumerate(zip(probs, labels)):
+        results.append({
+            "index": int(i),
+            "probability_confirmed": float(p),
+            "prediction": "CONFIRMED" if l == 1 else "FALSE POSITIVE"
+        })
+
+    return {
         "model": model_name,
-        "probability_confirmed": float(prob),
-        "prediction": "CONFIRMED" if label == 1 else "FALSE POSITIVE"
+        "results": results
     }
 
+<<<<<<< HEAD
     return result
  """
 

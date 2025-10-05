@@ -3,8 +3,12 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pandas as pd
 import io
 
-from server.memory import retornodf
+#from server.memory import retornodf
 from ml.inference import predict_exoplanet
+
+
+# retorno modelo df
+retornodf = 7
 
 app = Flask(
     __name__,
@@ -43,6 +47,7 @@ def predict():
     nombre_modelo_actual = request.form.get('modelo_seleccionado')
 
     try:
+        global retornodf
         csv_data = io.StringIO(file.stream.read().decode("UTF8"))
         df = pd.read_csv(csv_data)
         
@@ -55,9 +60,9 @@ def predict():
         # guardar en memoria, kepler.csv funciona bien
         # ####################################################
         df_almacenado = df
-        print(df_almacenado)
 
         res = predict_exoplanet(df_almacenado, 'random_forest')
+        print("res", res)
         retornodf = res
         # ####################################################
         # llamar al modelo
@@ -76,10 +81,13 @@ def predict():
 # --- RUTA /predict MODIFICADA ---
 # --- RUTA /predict MODIFICADA ---
 # --- RUTA /predict MODIFICADA ---
-@app.route('/dfres', methods=['GET'])
+@app.route('/dfres')
 def dfres():
-    temp = retornodf
-    return jsonify(temp)
+    #temp = retornodf
+    #print('!!!!!!!!!!!!!!!!', temp)
+    
+    return str(retornodf)
+    #return render_template('predict.html', data=retornodf, )
 
 @app.route("/community")
 def community():
