@@ -1,7 +1,7 @@
 import joblib
 import numpy as np
 import pandas as pd
-from util.features import create_efficient_features
+from ml.util.features import create_efficient_features
 
 # Load models once
 rf_model = joblib.load('ml/models/randomforest_model.pkl')
