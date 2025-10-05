@@ -3,104 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exosis</title>
-    <link rel="stylesheet" type="text/css" href={{ url_for('static', filename='dashboard.css') }}>
-    <!-- Carga de Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+    <title>Exosis - Dashboard de Modelo</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<link rel="icon" href={{ url_for('static', filename='favicon.png') }} type="image/x-icon">
-
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
+    
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
-<body class="space-bg min-h-screen text-white antialiased p-4 sm:p-8">
+<body>
 
-    <div class="container mx-auto max-w-7xl">
-        <!-- H1 - Cabecera Principal (como en el mockup) -->
-        <header class="mb-8 p-4 bg-indigo-600 rounded-xl shadow-xl shadow-indigo-600/40">
-            <h1 class="text-4xl font-extrabold tracking-tight text-white drop-shadow-lg">
-                "Nombre del modelo"
-            </h1>
+    <div class="container">
+        <header class="card header-card">
+            <h1>{{ modelo_seleccionado }}</h1>
         </header>
 
-        <!-- Main Content - Contenido principal dividido en columnas -->
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-
-            <!-- Columna Izquierda (1/2 del espacio en desktop) -->
-            <section class="lg:col-span-2 space-y-8">
-                
-                <!-- Sección H3 Principal -->
-                <div class="data-card p-6 sm:p-8 rounded-xl">
-                    <h3 class="text-2xl font-bold text-indigo-400 mb-4 border-b border-indigo-500/30 pb-2">
-                        Hyperparameters
-                    </h3>
-                    
-                    <!-- Columna izquierda -->
-                    <div class="space-y-4 text-gray-300">
-                        <p class="leading-relaxed">
-                            <span class="font-semibold text-white">Árboles:</span> -.
-                        </p>
-                        <p class="leading-relaxed">
-                            <span class="font-semibold text-white">Tasa de Aprendizaje:</span> -.
-                        </p>
-                        <div class="w-full bg-gray-700 rounded-full h-2.5">
-                            <div class="bg-indigo-500 h-2.5 rounded-full w-[85%]"></div>
-                        </div>
+        <div class="main-grid">
+            <section class="left-column">
+                <div class="card">
+                    <h3 class="accent-indigo">Hyperparameters</h3>
+                    <div class="param-text">
+                        <p><span>Árboles:</span> -.</p>
+                        <p><span>Tasa de Aprendizaje:</span> -.</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 85%;"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- Columna Derecha (1/2 del espacio en desktop) -->
-            <aside class="lg:col-span-2 space-y-8">
-
-                <!-- Área de Gráfico (Chart) -->
-                <div class="data-card p-6 rounded-xl h-64 flex flex-col justify-center items-center">
-                    <h3 class="text-xl font-bold text-indigo-400 mb-4">
-                        Accuracy: 95%
-                    </h3>
-                    <!-- Placeholder visual para el gráfico -->
-
-
-                        <canvas id="myPieChart">
-                          
-                        </canvas>
-<!--                    <div class="w-full h-32 bg-indigo-900/50 rounded-lg flex items-center justify-center text-sm text-gray-500 border border-indigo-400/20">
-                    </div>-->
+            <aside class="right-column">
+                <div class="card chart-container">
+                    <h3 class="accent-indigo" style="border: none; margin: 0 0 16px 0;">Accuracy: 95%</h3>
+                    <canvas id="myPieChart"></canvas>
                 </div>
 
-                <!-- Dos Columnas H3 en el Fondo -->
-                <div class="grid grid-cols-2 gap-4">
-                    
-                    <!-- H3 Columna 1 -->
-                    <div class="data-card p-4 rounded-xl">
-                        <h3 class="text-lg font-bold text-teal-400 mb-3">
-                            Predict
-                        </h3>
-                        <!-- Placeholder de cuadrados -->
-                        <div class="flex justify-center space-x-4">
-                          <div class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-500 transition cursor-pointer shadow-md flex items-center justify-center">
-                            CSV
-                          </div>
-                          <div class="px-4 py-2 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-500 transition cursor-pointer shadow-md flex items-center justify-center">
-                            Single
-                          </div>
+                <div class="sub-grid">
+                    <div class="card">
+                        <h3 class="accent-teal">Predict</h3>
+                        <div class="btn-wrapper">
+                            <button class="btn btn-teal">CSV</button>
+                            <button class="btn btn-teal">Single</button>
                         </div>
-
                     </div>
-                    
-                    <!-- H3 Columna 2 -->
-                    <div class="data-card p-4 rounded-xl">
-                        <h3 class="text-lg font-bold text-red-400 mb-3">
-                            Train
-                        </h3>
-                        <!-- Placeholder de cuadrados -->
-
-
-                        <div class="flex justify-center space-x-4">
-                          <div class="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-500 transition cursor-pointer shadow-md flex items-center justify-center">
-                            CSV
-                          </div>
+                    <div class="card">
+                        <h3 class="accent-red">Train</h3>
+                        <div class="btn-wrapper">
+                            <button class="btn btn-red">CSV</button>
                         </div>
                     </div>
                 </div>
@@ -108,20 +57,51 @@
         </div>
     </div>
 
-
-  <!-- ============================= -->
-  <!-- ============================= -->
-  <!-- boton circular p/home -->
-  <div class="relative w-full h-8 bg-white-100">
-      <!-- Círculo con icono -->
-      <div class="absolute bottom-8 left-6 w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-white transition transform hover:scale-105 cursor-pointer">
-      <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Icono" class="w-10 h-10">
+    <div id="botonInicioContainer">
+        <div id="botonInicio">
+            <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Icono de Inicio">
+        </div>
     </div>
-</div>
 
-  <!-- ============================= -->
-  <!-- ============================= -->
-</body>
+    <script>
+        // Lógica del botón de inicio
+        document.getElementById('botonInicio').addEventListener('click', (el) => {
+            el.preventDefault();
+            window.location.href = "/inicio";
+        });
+
+        // Configuración y datos del gráfico
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Correctos', 'Incorrectos'],
+                datasets: [{
+                    data: [95, 5],
+                    // Colores que combinan con el tema "Exosis"
+                    backgroundColor: [
+                        '#4f46e5', // Indigo-600
+                        'rgba(255, 255, 255, 0.1)' // Fondo de tarjeta
+                    ],
+                    borderColor: '#0c0a1d', // Color de fondo principal
+                    borderWidth: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                }
+            }
+        });
+    </script>
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
 </html>
-

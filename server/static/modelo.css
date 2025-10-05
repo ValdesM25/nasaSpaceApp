@@ -1,0 +1,274 @@
+/* ============================= */
+/* ESTILOS GLOBALES Y FUENTE     */
+/* ============================= */
+body {
+  /* Estilo base de la página con el gradiente y la fuente de "Exosis" */
+  background: linear-gradient(135deg, #1e1b4b 0%, #0c0a1d 100%); /* Gradiente de Indigo a Negro/Púrpura */
+  font-family: 'Space Grotesk', sans-serif;
+  color: #e5e7eb; /* Un gris muy claro (text-gray-200) */
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ============================= */
+/* LAYOUT Y CONTENEDORES         */
+/* ============================= */
+.container {
+  width: 100%;
+  max-width: 1280px; /* 7xl de Tailwind */
+  margin: 0 auto;
+  padding: 32px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.templates {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 640px) { .templates { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .templates { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1024px) { .templates { grid-template-columns: repeat(5, 1fr); gap: 24px; } }
+
+
+.content-wrapper {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+@media (min-width: 1024px) { .content-wrapper { grid-template-columns: repeat(2, 1fr); } }
+
+
+/* ============================= */
+/* TIPOGRAFÍA                    */
+/* ============================= */
+h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+h1 .accent {
+  color: #818cf8; /* indigo-400 de Tailwind */
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.muted {
+  color: #9ca3af; /* gray-400 de Tailwind */
+}
+
+/* ============================= */
+/* TARJETAS DE "CRISTAL"         */
+/* ============================= */
+.card {
+  /* Estilo base para las tarjetas con efecto glassmorphism */
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(129, 140, 248, 0.3); /* indigo-400 con opacidad */
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 24px;
+}
+
+/* Tarjetas de Modelos */
+.model-card {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  padding: 16px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  cursor: pointer;
+}
+.model-card:hover {
+  transform: scale(1.05);
+  border-color: #818cf8; /* indigo-400 */
+}
+
+.model-card .first-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 18px;
+  transition: opacity 0.3s ease;
+}
+.model-card:hover .first-content {
+  opacity: 0;
+}
+
+.model-card .second-content {
+  position: absolute;
+  inset: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.model-card:hover .second-content {
+  opacity: 1;
+}
+.model-card .second-content span {
+    font-size: 14px;
+    color: #d1d5db; /* gray-300 */
+    margin-bottom: 16px;
+}
+
+/* ============================= */
+/* BOTONES                       */
+/* ============================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 9999px; /* rounded-full */
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background-color: #4f46e5; /* indigo-600 */
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: #4338ca; /* indigo-700 */
+}
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e5e7eb;
+    border: 1px solid rgba(129, 140, 248, 0.3);
+}
+.btn-secondary:hover {
+    background-color: rgba(129, 140, 248, 0.2);
+}
+
+.profile-btn {
+  width: 48px;
+  height: 48px;
+  font-size: 20px;
+}
+
+.nuevo-proyecto {
+  padding: 12px 24px;
+  font-size: 16px;
+}
+
+/* ============================= */
+/* FORMULARIOS Y CONTROLES       */
+/* ============================= */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+@media (min-width: 640px) { .controls { flex-direction: row; align-items: center; } }
+
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-grow: 1;
+  height: 48px;
+  padding: 0 16px;
+  /* Estilo glassmorphism para el input */
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.search svg {
+  color: #9ca3af; /* gray-400 */
+}
+
+.search input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e5e7eb;
+}
+.search input::placeholder {
+    color: #9ca3af;
+}
+
+/* ============================= */
+/* TABLA                         */
+/* ============================= */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af; /* gray-400 */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody td {
+  padding: 16px;
+  font-size: 14px;
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: #3730a3; /* indigo-800 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}

@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 
+# import memory
+
 app = Flask(__name__)
 
 # login
@@ -11,9 +13,14 @@ def home():
 def inicio():
     return render_template("modelo.html", prueba="")
 # mandar al modelo
-@app.route("/dashboard")
-def modelo():
-    return render_template("dashboard.html", prueba="")
+# --- RUTA MODIFICADA ---
+# Ahora la ruta acepta una variable de texto llamada 'nombre_modelo'
+@app.route("/dashboard/<nombre_modelo>")
+def modelo(nombre_modelo):
+    # Pasamos la variable 'nombre_modelo' al template de dashboard.html
+    # Dentro del HTML, podrás acceder a ella usando {{ modelo_seleccionado }}
+    return render_template("dashboard.html", modelo_seleccionado=nombre_modelo)
+
 
 @app.route("/community")
 def community():
