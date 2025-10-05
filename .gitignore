@@ -1,3 +1,5 @@
 venv/
 .venv/
 __pycache__/
+# Ignora todas las dependencias de Node
+node_modules/
