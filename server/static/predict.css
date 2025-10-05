@@ -1,0 +1,44 @@
+/* predict.css */
+/* Reutilizamos los estilos globales y de tarjeta que ya tenemos */
+body {
+  background: linear-gradient(135deg, #1e1b4b 0%, #0c0a1d 100%);
+  font-family: 'Space Grotesk', sans-serif;
+  color: #e5e7eb;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+.container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 32px; }
+header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+h1 { font-size: 36px; font-weight: 700; color: #ffffff; }
+h1 .accent { color: #818cf8; }
+h2 { font-size: 24px; font-weight: 700; color: #ffffff; margin-bottom: 16px; }
+.card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 16px; backdrop-filter: blur(10px); padding: 24px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 9999px; font-weight: 600; transition: all 0.2s ease; cursor: pointer; border: none; font-size: 14px; text-decoration: none; }
+.btn-primary { background-color: #4f46e5; color: #ffffff; }
+.btn-primary:hover { background-color: #4338ca; }
+.btn-secondary { background-color: rgba(255, 255, 255, 0.1); color: #e5e7eb; border: 1px solid rgba(129, 140, 248, 0.3); }
+.btn-secondary:hover { background-color: rgba(129, 140, 248, 0.2); }
+.muted { color: #9ca3af; }
+
+/* Estilos para la tabla */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto; /* Permite scroll horizontal en tablas grandes */
+}
+table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+thead th { padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: #9ca3af; text-transform: uppercase; border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+tbody tr { border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+tbody tr:last-child { border-bottom: none; }
+tbody td { padding: 16px; font-size: 14px; vertical-align: middle; }
+tbody tr:hover { background-color: rgba(255, 255, 255, 0.03); }
+
+/* Estilos para el formulario de subida de archivo */
+.file-upload-wrapper input[type="file"] {
+    display: none; /* Ocultamos el input feo por defecto */
+}
+.file-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
