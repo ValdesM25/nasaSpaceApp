@@ -20,65 +20,96 @@
             <h1>{{ modelo_seleccionado }}</h1>
         </header>
 
-        <div class="main-grid">
-            <section class="left-column">
-                <div class="card">
-                    <h3 class="accent-indigo">Hyperparameters</h3>
-                    <div class="param-text">
-                        <p><span>Trees:</span> -.</p>
-                        <p><span>Learning Rate:</span> -.</p>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-bar-fill" style="width: 85%;"></div>
-                    </div>
-                </div>
-            </section>
+<div class="main-grid">
 
-            <aside class="right-column">
-                <div class="card chart-container">
-                    <h3 class="accent-indigo" style="border: none; margin: 0 0 16px 0;">Accuracy: 95%</h3>
-                    <canvas id="myPieChart"></canvas>
-                </div>
-
-               <div class="card">
-    <h3 class="accent-teal">Predict</h3>
-    <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view, or try a single prediction.</p>
-    
-    <form id="predict-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+    <section class="left-column">
         
-        <input type="hidden" name="modelo_seleccionado" value="{{ modelo_seleccionado }}">
-        
-        <input type="file" id="csv-input" name="csvfile" style="display: none;" accept=".csv">
+        <div class="card param-card">
+            <h class="accent-indigo">Hyperparameters</h2>
+            <div class="param-text" style="min-height: 120px; font-size: 1rem; color: #cbd5e1;">
+                
+                <p style="margin-bottom: 12px;">
+                    <span style="color: #818cf8; font-weight: 600;"># of Trees:</span> 100
+                    <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-top: 2px;">
+                        (Number of independent "judges" used for voting.)
+                    </span>
+                </p>
 
-        <div class="btn-wrapper">
-            <button type="button" id="upload-csv-button" class="btn btn-teal">
-                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
-                Upload CSV
-            </button>
-            
-            <button type="button" id="single-predict-button" class="btn btn-teal">
-                <i class="fa-solid fa-keyboard" style="margin-right: 8px;"></i>
-                Try a Single One
-            </button>
+                <p style="margin-bottom: 12px;">
+                    <span style="color: #818cf8; font-weight: 600;">Max Depth:</span> 10
+                    <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-top: 2px;">
+                        (Maximum number of rules each tree can learn.)
+                    </span>
+                </p>
+                
+                <p style="margin-bottom: 12px;">
+                    <span style="color: #818cf8; font-weight: 600;">Min Samples Split:</span> 5
+                    <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-top: 2px;">
+                        (Minimum data required for a decision point.)
+                    </span>
+                </p>
+
+                <p style="margin-bottom: 12px;">
+                    <span style="color: #818cf8; font-weight: 600;">Random Seed:</span> 42
+                    <span style="display: block; font-size: 0.8rem; color: #94a3b8; margin-top: 2px;">
+                        (Ensures results are reproducible.)
+                    </span>
+                </p>
+
+            </div>
+
+            <div style="margin-top: 20px;"></div>
+
         </div>
 
-        <span id="file-name-display" class="muted" style="margin-top: 16px; display: block;"></span>
-    </form>
+        <div class="card">
+            <h3 class="accent-teal">Predict</h3>
+            <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view, or try a single prediction.</p>
+            
+            <form id="predict-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="modelo_seleccionado" value="{{ modelo_seleccionado }}">
+                <input type="file" id="csv-input" name="csvfile" style="display: none;" accept=".csv">
+
+                <div class="btn-wrapper">
+                    <button type="button" id="upload-csv-button" class="btn btn-teal">
+                        <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                        Upload CSV
+                    </button>
+                    <a href="http://localhost:5173" id="single-predict-button" class="btn btn-teal">
+                        <i class="fa-solid fa-keyboard" style="margin-right: 8px;"></i>
+                        Try a Single One
+                    </a>
+                </div>
+                <span id="file-name-display" class="muted" style="margin-top: 16px; display: block;"></span>
+            </form>
+        </div>
+
+    </section>
+
+    <aside class="right-column">
+        
+        <div class="card chart-container">
+            <h3 class="accent-indigo" style="border: none;">Accuracy: 93.25%</h3>
+            <div class="container-inline">
+            <img src="../static/shap_fi.jpg" alt="SHAP Feature Importance"  width="200" height="150">
+            <img src="../static/shap_summary.jpg" alt="SHAP Summary"  width="200" height="150">
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="accent-red">Train</h3>
+            <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
+            <div class="btn-wrapper">
+                <button type="button" id="csv-button" class="btn btn-red">
+                    <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                    Upload CSV
+                </button>
+            </div>
+        </div>
+
+    </aside>
 </div>
 
-                    <div class="card">
-                        <h3 class="accent-red">Train</h3>
-                        <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
-                        <div class="btn-wrapper">
-                            <button type="button" id="csv-button" class="btn btn-red">
-                                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
-                                Upload CSV
-                            </button>
-                        </div>
-                    </div>
-
-
-                </div>
             </aside>
         </div>
     </div>
@@ -112,14 +143,14 @@
             data: {
                 labels: ['Correct', 'Incorrect'],
                 datasets: [{
-                    data: [95, 5],
+                    data: [93.25, 6.75],
                     // Colores que combinan con el tema "Exosis"
                     backgroundColor: [
                         '#4f46e5', // Indigo-600
                         'rgba(255, 255, 255, 0.1)' // Card background
                     ],
                     borderColor: '#0c0a1d', // Main background color
-                    borderWidth: 4
+                    borderWidth: 1
                 }]
             },
             options: {

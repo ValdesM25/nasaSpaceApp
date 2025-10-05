@@ -1,101 +1,111 @@
 /* ============================= */
-/* ESTILOS GLOBALES Y FUENTE     */
+/* ESTILOS GLOBALES Y FUENTE     */
 /* ============================= */
 body {
-  background: linear-gradient(135deg, #1e1b4b 0%, #0c0a1d 100%);
-  font-family: 'Space Grotesk', sans-serif;
-  color: #e5e7eb; /* text-gray-200 */
-  min-height: 100vh;
-  margin: 0;
-  overflow-x: hidden;
+    background: linear-gradient(135deg, #1e1b4b 0%, #0c0a1d 100%);
+    font-family: 'Space Grotesk', sans-serif;
+    color: #e5e7eb; /* text-gray-200 */
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 /* ============================= */
-/* LAYOUT Y CONTENEDORES         */
+/* LAYOUT Y CONTENEDORES         */
 /* ============================= */
 .container {
-  width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 32px;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px;
 }
 
+/* El main-grid ahora funciona para el layout 2x2. */
 .main-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
-}
-@media (min-width: 1024px) {
-  .main-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
+    display: grid;
+    gap: 32px; /* Espacio entre todos los cards */
+    margin-top: 32px;
+    /* Por defecto, en móviles, apila 1 columna */
+    grid-template-columns: 1fr;
 }
 
-.left-column {
-  grid-column: span 1 / span 1;
-}
+/* Para pantallas grandes (Escritorio/Tablet) */
 @media (min-width: 1024px) {
-  .left-column {
+    .main-grid {
+        /* Define 4 columnas iguales para que el layout 2x2 funcione con las clases span */
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* Las clases left/right-column ahora posicionan los grandes contenedores */
+.left-column {
+    /* Ocupa las primeras 2 columnas de 4 */
     grid-column: span 2 / span 2;
-  }
+    /* Necesitas que el contenido se apile verticalmente */
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
 .right-column {
-  grid-column: span 1 / span 1;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-@media (min-width: 1024px) {
-  .right-column {
+    /* Ocupa las últimas 2 columnas de 4 */
     grid-column: span 2 / span 2;
-  }
+    /* Apila los elementos verticalmente */
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
 }
 
+/* La sub-grid ya no es necesaria con el HTML corregido, pero la dejo si la usas en otro lado */
 .sub-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
 }
 
 /* ============================= */
-/* TARJETAS (CARDS)              */
+/* TARJETAS (CARDS) - ESTILO BASE */
 /* ============================= */
 .card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(129, 140, 248, 0.3);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  padding: 32px;
+    /* Fondo semi-transparente, borde y blur */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(129, 140, 248, 0.3);
+    
+    /* ⭐ CORRECCIÓN: Bordes redondeados y padding base ⭐ */
+    border-radius: 16px; 
+    padding: 32px;
+    
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); 
 }
-
 .header-card {
-  padding: 24px;
-  margin-bottom: 32px;
-  background-color: #4f46e5; /* indigo-600 */
-  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+    padding: 24px;
+    margin-bottom: 32px;
+    background-color: #4f46e5; /* indigo-600 */
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+    
 }
 
 /* ============================= */
-/* TIPOGRAFÍA                    */
+/* TIPOGRAFÍA                    */
 /* ============================= */
 h1 {
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  margin: 0;
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin: 0;
 }
 
 h3 {
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(129, 140, 248, 0.2);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(129, 140, 248, 0.2);
 }
 
 h3.accent-indigo { color: #818cf8; /* indigo-400 */ }
@@ -103,75 +113,92 @@ h3.accent-teal { color: #2dd4bf; /* teal-400 */ }
 h3.accent-red { color: #f87171; /* red-400 */ }
 
 .param-text {
-  font-size: 16px;
-  color: #d1d5db; /* gray-300 */
-  margin-bottom: 16px;
+    font-size: 16px;
+    color: #d1d5db; /* gray-300 */
+    margin-bottom: 16px;
 }
 .param-text span {
-  font-weight: 600;
-  color: #fff;
+    font-weight: 600;
+    color: #fff;
 }
 
 /* ============================= */
-/* COMPONENTES                   */
+/* COMPONENTES                   */
 /* ============================= */
 .progress-bar {
-  width: 100%;
-  height: 10px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  overflow: hidden;
+    width: 100%;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    overflow: hidden;
 }
 .progress-bar-fill {
-  height: 100%;
-  background-color: #818cf8;
-  border-radius: 5px;
+    height: 100%;
+    background-color: #818cf8;
+    border-radius: 5px;
 }
 
-.chart-container {
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.chart-container h3 {
+    color: #a78bfa; 
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    text-shadow: 0 0 5px rgba(167, 139, 250, 0.8); 
+    border-bottom: none; /* Elimina la línea divisoria del h3 dentro del chart */
 }
 
+/* CANVAS DEL GRÁFICO (myPieChart) */
+/* ============================= */
 canvas#myPieChart {
-    max-width: 180px;
+    /* Mantenemos tus dimensiones */
+    max-width: 180px; 
     max-height: 180px;
+    
+    /* ⭐ CORRECCIÓN: Centrado horizontal y margen ⭐ */
+    display: block;
+    margin: 20px auto 0 auto; /* Centra y da margen superior */
+    
+    /* Efectos visuales */
+    box-shadow: inset 0 0 15px rgba(167, 139, 250, 0.2); 
+    border-radius: 50%; /* Lo hace un círculo perfecto */
+    border: 2px solid rgba(167, 139, 250, 0.4); 
 }
 
 /* Botones */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  cursor: pointer;
-  border: none;
-  color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+    color: #fff;
 }
 .btn-wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
 }
 .btn-teal {
-    background-color: #0d9488; /* teal-600 */
+    background-color: #0d9488; 
     box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
 }
 .btn-teal:hover {
-    background-color: #0f766e; /* teal-700 */
+    background-color: #0f766e; 
 }
 .btn-red {
-    background-color: #dc2626; /* red-600 */
+    background-color: #dc2626; 
     box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
 }
 .btn-red:hover {
-    background-color: #b91c1c; /* red-700 */
+    background-color: #b91c1c; 
 }
 
-
+.container-inline {
+    display: flex; /* 1. ¡Este es el truco! Habilita Flexbox. */
+    justify-content: center; /* 2. Opcional: Centra el grupo horizontalmente. */
+    gap: 20px; /* 3. Opcional: Agrega espacio entre las dos imágenes/divs. */
+}
