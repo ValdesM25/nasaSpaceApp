@@ -1,0 +1,23 @@
+        /* Reutilizando el fondo espacial de referencia */
+        @keyframes subtle-star-movement {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .space-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #080b13 100%);
+            background-size: 400% 400%; 
+            animation: subtle-star-movement 120s ease infinite alternate; 
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Estilo para tarjetas de datos con un borde sutil de neón */
+        .data-card {
+            background-color: rgba(30, 41, 59, 0.4); /* slate-800 / 40% opacity */
+            border: 1px solid rgba(129, 140, 248, 0.1); /* indigo-400 / 10% opacity */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+canvas {
+  max-width: 150px;
+  max-height: 150px;
+}

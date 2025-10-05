@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pantalla tipo Word</title>
+<style>
+:root {
+  --bg:#1f2933;--panel:#23272b;--muted:#9aa4ad;--accent:#0b5ed7;
+  --card:#111214;--surface:#151617;--glass:rgba(255,255,255,0.03);
+  --radius:12px;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+* { box-sizing:border-box }
+html,body { height:100%; margin:0; background:linear-gradient(180deg,var(--bg),#121416); color:#e6eef6; }
+.container { max-width:1200px; margin:28px auto; padding:24px; position:relative; }
+
+header { display:flex; align-items:center; gap:24px; justify-content:space-between }
+h1 { font-size:18px; margin:0; color:#fff }
+
+.templates { display:flex; gap:20px; padding:20px 0; flex-wrap:wrap; }
+
+/* BOTÓN NUEVO PROYECTO */
+button.nuevo-proyecto {
+  padding: 15px 30px 15px 50px;
+  background: #181c35;
+  border-radius: 30px;
+  display: flex;
+  position: relative;
+  color: #fff;
+  font-weight: 400;
+  overflow: hidden;
+  transition: all ease-in-out .5s;
+  border: #ffffff56 solid 1px;
+  box-shadow: #51eafd 0px 0px 50px -15px;
+  cursor: pointer;
+}
+button.nuevo-proyecto .text { z-index: 9; transition: all ease-in-out .3s; }
+
+/* BOTÓN PERFIL */
+.profile-btn {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: #0b5ed7;
+  color: #fff;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+  border:none;
+  transition: all 0.3s ease;
+}
+.profile-btn:hover { background:#084298; transform: scale(1.1); }
+
+/* TARJETAS */
+.card {
+  width: 190px; height: 254px;
+  background: rgb(103, 225, 255);
+  transition: all 0.4s;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.705);
+  font-size: 30px; font-weight: 900; position: relative;
+}
+.card:hover { border-radius: 15px; cursor: pointer; transform: scale(1.2); background: rgb(103, 151, 255); }
+.first-content { height:100%; width:100%; transition: all 0.4s; display:flex; justify-content:center; align-items:center; opacity:1; border-radius:15px; }
+.card:hover .first-content { height:0px; opacity:0; }
+.second-content {
+  height:0%; width:100%; opacity:0;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  border-radius:15px;
+  transition: all 0.4s;
+  font-size:0px; transform: rotate(90deg) scale(-1);
+}
+.card:hover .second-content { opacity:1; height:100%; font-size:1.2rem; transform: rotate(0deg); }
+
+/* BOTÓN dentro de tarjeta */
+.btn-select {
+  margin-top: 12px; padding: 8px 16px; border-radius: 8px;
+  border: none; background-color: #0b5ed7; color: white;
+  font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+}
+.btn-select:hover { background-color: #084298; transform: scale(1.05); }
+
+/* RECOMENDADOS */
+.recommended { margin-top:22px }
+.rec-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px }
+.rec-card { background:var(--panel); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:12px }
+.rec-meta { display:flex; align-items:center; gap:10px }
+.avatar { width:36px; height:36px; border-radius:50%; background:#7a1f1f; display:flex; align-items:center; justify-content:center; color:#fff }
+.rec-thumb { height:120px; background:#f3f3f3; border-radius:4px; display:flex; align-items:center; justify-content:center; color:#222 }
+.rec-title { font-weight:600; color:#fff }
+
+/* BUSCADOR */
+.controls { display:flex; gap:12px; align-items:center; margin-top:20px }
+.search { flex:1; background:var(--surface); padding:10px; border-radius:8px; display:flex; gap:10px; align-items:center }
+.search input { background:transparent; border:0; outline:none; color:#e6eef6; font-size:14px; width:100% }
+.btn { background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:8px; cursor:pointer; color:var(--muted) }
+
+table { width:100%; border-collapse:collapse; margin-top:16px }
+thead th { font-weight:600; text-align:left; padding:10px 8px; color:var(--muted); font-size:13px }
+tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(255,255,255,0.02) }
+.file-name { display:flex; align-items:center; gap:12px }
+.file-icon { width:36px; height:36px; border-radius:6px; background:#143a72; display:inline-flex; align-items:center; justify-content:center }
+.muted { color:var(--muted) }
+
+@media (max-width:900px) { .rec-grid { grid-template-columns:1fr } .templates { overflow:auto; padding-bottom:8px } }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Crear nuevo</h1>
+   <header>  
+      <button id="botonComunidad" class="profile-btn">A</button>
+<script>const botonComunidad = document.getElementById('botonComunidad')
+    botonComunidad.addEventListener('click',(el)=>{
+      el.preventDefault();
+      window.location.href="/community"
+    });
+  </script>
+    </a>
+  </header>
+
+    <button class="nuevo-proyecto" onclick="nuevoProyecto()">
+    <span class="text">Nuevo Proyecto</span>
+  </button>
+
+  <h2 style="color:white; margin-top:24px;">Modelos</h2>
+  <div class="templates" role="list">
+    <!-- TARJETAS -->
+    <div class="card">
+      <div class="first-content"><span>Random Forest</span></div>
+      <div class="second-content">
+        <span>Descripción</span>
+        <button id="botonRandomF"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <script>const botonRandomF = document.getElementById('botonRandomF')
+          botonRandomF.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dasboard"
+          });
+        </script>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="first-content"><span>Deep Learning</span></div>
+      <div class="second-content">
+        <span>Descripción</span>
+        <button id="botonDeepL"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <script>const botonDeepL = document.getElementById('botonDeepL')
+          botonDeepL.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dashboard"
+          });
+        </script>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="first-content"><span>XGBoost</span></div>
+      <div class="second-content">
+        <span>Descripción</span>
+        <button id="botonXGB"="btn-select" onclick="seleccionarModelo('XGBoost')">Seleccionar</button>
+        <script>const botonXGB = document.getElementById('botonXGB')
+          botonXGB.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dashboard"
+          });
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMENDADOS -->
+  <section class="recommended">
+    <h2 style="margin:0 0 12px 0;color:var(--muted)">Recomendados</h2>
+    <div class="rec-grid">
+      <div class="rec-card">
+        <div class="rec-meta"><div class="avatar">A</div><div class="muted">Este archivo se ha editado recientemente</div></div>
+        <div class="rec-thumb">Vista previa del documento</div>
+        <div class="rec-title">Tecnológico Nacional de México - Avance proyecto iteración 1</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-meta"><div class="avatar">A</div><div class="muted">Ha editado</div></div>
+        <div class="rec-thumb">Miniatura</div>
+        <div class="rec-title">Minuta de la reunión (Formato)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUSCADOR -->
+  <div class="controls">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6"></circle></svg>
+      <input id="q" placeholder="Buscar en mis archivos" oninput="filterFiles()">
+    </div>
+    <button class="btn" onclick="toggleView()">Filtrar</button>
+    <button class="btn" onclick="upload()">Cargar</button>
+  </div>
+
+  <!-- TABLA DE ARCHIVOS -->
+  <table aria-label="Lista de archivos">
+    <thead><tr><th>Nombre</th><th>Modificado</th><th>Propietario</th><th>Actividad</th></tr></thead>
+    <tbody id="files">
+      <tr><td><div class="file-name"><div class="file-icon">W</div><div><div>Tecnológico Nacional de México - Avance proyecto iteración 1</div><div class="muted" style="font-size:12px">Archivos de ALEJANDRO P</div></div></div></td><td>Ayer a las 6:26 p.m.</td><td>ALEJANDRO PUENTE RAMIREZ</td><td class="muted">Lo abre con frecuencia</td></tr>
+      <tr><td><div class="file-name"><div class="file-icon">M</div><div><div>Minuta de la reunión (Formato)</div><div class="muted" style="font-size:12px">23 sept</div></div></div></td><td>23/09/2025</td><td>ALEJANDRO P</td><td class="muted">Editado</td></tr>
+      <tr><td><div class="file-name"><div class="file-icon">D</div><div><div>Notas personales</div><div class="muted" style="font-size:12px">Carpeta Personal</div></div></div></td><td>Hoy a las 10:47 p.m.</td><td>YO</td><td class="muted">Reciente</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+let modeloSeleccionado = null;
+
+function seleccionarModelo(nombre) {
+  modeloSeleccionado = nombre;
+  alert('Modelo seleccionado: ' + nombre);
+}
+
+function nuevoProyecto() {
+  if (!modeloSeleccionado) {
+    alert('Debes seleccionar un modelo antes de crear un nuevo proyecto.');
+    return;
+  }
+  alert('Nuevo proyecto creado usando el modelo: ' + modeloSeleccionado);
+}
+
+function toggleView(){ alert('Abrir panel de filtros (simulación)'); }
+function upload(){ alert('Seleccionar archivo para subir (simulación)'); }
+function filterFiles(){
+  const q = document.getElementById('q').value.toLowerCase();
+  const rows = document.querySelectorAll('#files tr');
+  rows.forEach(r=>{
+    const text = r.innerText.toLowerCase();
+    r.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

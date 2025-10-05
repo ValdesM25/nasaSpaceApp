@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exosis - Comunidad</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              // Hacemos que 'sans' sea Space Grotesk por defecto
+              'sans': ['Space Grotesk', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-indigo-900 to-black min-h-screen font-sans text-gray-200">
+
+    <div class="w-full max-w-7xl mx-auto p-8">
+        
+        <h1 class="text-4xl font-bold mb-8 tracking-wider">
+            <span class="text-indigo-400">COMM</span>UNITY
+        </h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1 flex flex-col gap-8">
+                
+                <div class="bg-white/5 border border-indigo-500/30 rounded-xl p-6 backdrop-blur-sm">
+                    <div class="flex items-center gap-4">
+                        <div class="text-indigo-400 text-4xl">
+                            <i class="fa-solid fa-user-astronaut"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white">Nombre de Usuario</h2>
+                            <p class="text-sm text-gray-400">Planet Hunter</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 space-y-3">
+                        <a href="#" class="block text-gray-300 hover:text-indigo-400 transition-colors">Mi Perfil</a>
+                        <a href="#" class="block text-gray-300 hover:text-indigo-400 transition-colors">Configuración</a>
+                        <a href="#" class="block text-red-500 hover:text-red-400 transition-colors">Cerrar Sesión</a>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-indigo-500/30 rounded-xl p-6 backdrop-blur-sm">
+                    <h3 class="text-lg font-bold text-white mb-4">Buscar Modelos</h3>
+                    <input
+                      type="text"
+                      placeholder="Nombre del modelo..."
+                      class="w-full h-12 px-4 bg-white/10 border border-indigo-500/30 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 rounded-lg text-white placeholder:text-gray-400 backdrop-blur-sm"
+                    />
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-white/5 border border-indigo-500/30 rounded-xl p-6 backdrop-blur-sm">
+                <h3 class="text-lg font-bold text-white mb-4">Noticias de la Comunidad</h3>
+                
+                <div class="space-y-6">
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="text-indigo-400 text-2xl mt-1">
+                           <i class="fa-solid fa-satellite"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Actualización del Sistema Exosis v2.1</h4>
+                            <p class="text-gray-400 text-sm">Se han implementado nuevas optimizaciones en el renderizado de exoplanetas. El rendimiento ha mejorado un 15%.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="text-indigo-400 text-2xl mt-1">
+                           <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Nueva Misión Comunitaria: "Cazadores de Kepler"</h4>
+                            <p class="text-gray-400 text-sm">Únete al esfuerzo global para analizar los datos del telescopio Kepler y descubre nuevos mundos. ¡Hay recompensas!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="text-indigo-400 text-2xl mt-1">
+                           <i class="fa-solid fa-circle-nodes"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Mantenimiento programado de servidores</h4>
+                            <p class="text-gray-400 text-sm">Habrá una breve interrupción del servicio el próximo martes para mejorar nuestra infraestructura de red.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
