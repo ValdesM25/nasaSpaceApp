@@ -1,0 +1,26 @@
+{
+    "XGBoost": {
+        "accuracy": 0.9325,
+        "accuracy_percent": 93.25,
+        "model_path": "ml/models/xgboost_model.pkl",
+        "train_size": 5860,
+        "test_size": 1466,
+        "timestamp": "2025-10-05_05-11-56"
+    },
+    "LightGBM": {
+        "accuracy": 0.9332,
+        "accuracy_percent": 93.32,
+        "model_path": "ml/models/lightgbm_model.pkl",
+        "train_size": 5860,
+        "test_size": 1466,
+        "timestamp": "2025-10-05_05-11-56"
+    },
+    "RandomForest": {
+        "accuracy": 0.9086,
+        "accuracy_percent": 90.86,
+        "model_path": "ml/models/randomforest_model.pkl",
+        "train_size": 5860,
+        "test_size": 1466,
+        "timestamp": "2025-10-05_05-11-56"
+    }
+}
