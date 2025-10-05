@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 import pandas as pd
 import io
 
+from server.memory import retornodf
+from ml.inference import predict_exoplanet
+
 app = Flask(__name__)
 
 # login
@@ -41,6 +44,20 @@ def predict():
         headers = df.columns.values.tolist()
         data = df.values.tolist()
 
+
+        # ####################################################
+        # ####################################################
+        # guardar en memoria, kepler.csv funciona bien
+        # ####################################################
+        df_almacenado = df
+        print(df_almacenado)
+
+        res = predict_exoplanet(df_almacenado)
+        retornodf = res
+        # ####################################################
+        # llamar al modelo
+        # ####################################################
+
         # NUEVO: Pasamos el nombre del modelo a la plantilla de predicción
         return render_template('predict.html', headers=headers, data=data, modelo_actual=nombre_modelo_actual)
             
@@ -48,12 +65,24 @@ def predict():
         return f"Hubo un error al procesar el archivo: {e}", 500
 
 
+# --- RUTA /predict MODIFICADA ---
+# --- RUTA /predict MODIFICADA ---
+# --- RUTA /predict MODIFICADA ---
+# --- RUTA /predict MODIFICADA ---
+# --- RUTA /predict MODIFICADA ---
+# --- RUTA /predict MODIFICADA ---
+@app.route('/dfres', methods=['GET'])
+def dfres():
+    temp = retornodf
+    return jsonify(temp)
+
 @app.route("/community")
 def community():
     return render_template("community.html")
 
 # main
 app.run(debug=True)
+
 
 
 #<button type="submit" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition #duration-300 shadow-lg hover:shadow-indigo-500/50">Enter Orbit</button>
