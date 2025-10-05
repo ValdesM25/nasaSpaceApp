@@ -109,7 +109,7 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
 <body>
 <div class="container">
     <h1>Crear nuevo</h1>
-   <header>  
+   <header>
       <button id="botonComunidad" class="profile-btn">A</button>
 <script>const botonComunidad = document.getElementById('botonComunidad')
     botonComunidad.addEventListener('click',(el)=>{
@@ -131,11 +131,11 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
       <div class="first-content"><span>Random Forest</span></div>
       <div class="second-content">
         <span>Descripción</span>
-        <button id="botonRandomF"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <button id="botonRandomF"class="btn-select">Seleccionar</button>
         <script>const botonRandomF = document.getElementById('botonRandomF')
           botonRandomF.addEventListener('click',(el)=>{
           el.preventDefault();
-          window.location.href="/dasboard"
+          window.location.href="/dashboard"
           });
         </script>
       </div>
@@ -145,7 +145,7 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
       <div class="first-content"><span>Deep Learning</span></div>
       <div class="second-content">
         <span>Descripción</span>
-        <button id="botonDeepL"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <button id="botonDeepL"class="btn-select">Seleccionar</button>
         <script>const botonDeepL = document.getElementById('botonDeepL')
           botonDeepL.addEventListener('click',(el)=>{
           el.preventDefault();
@@ -159,7 +159,7 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
       <div class="first-content"><span>XGBoost</span></div>
       <div class="second-content">
         <span>Descripción</span>
-        <button id="botonXGB"="btn-select" onclick="seleccionarModelo('XGBoost')">Seleccionar</button>
+        <button id="botonXGB" class="btn-select">Seleccionar</button>
         <script>const botonXGB = document.getElementById('botonXGB')
           botonXGB.addEventListener('click',(el)=>{
           el.preventDefault();
