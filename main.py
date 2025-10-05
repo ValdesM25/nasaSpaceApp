@@ -94,7 +94,28 @@ def community():
     return render_template("community.html")
 @app.route("/results")
 def results():
-    return render_template("resultscsv.html")
+    json_data = retornodf
+    
+    if not json_data:
+        return "No hay datos para mostrar", 400
+
+    # Extraemos la lista de resultados
+    resultados = json_data.get("results", [])  
+
+    if not resultados:
+        return "No hay resultados para mostrar", 400
+
+    # Tomamos los headers de la primera fila
+    headers = list(resultados[0].keys())
+
+    modelo_actual = json_data.get("model", "Modelo desconocido")
+
+    return render_template("resultscsv.html",
+                           headers=headers,
+                           data=json_data,
+                           modelo=modelo_actual)
+
+
 
 # main
 app.run(debug=True)
