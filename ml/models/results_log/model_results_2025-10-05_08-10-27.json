@@ -1,0 +1,29 @@
+{
+    "XGBoost": {
+        "accuracy": 0.9304,
+        "accuracy_percent": 93.04,
+        "model_path": "models/xgboost_model.pkl",
+        "shap_explainer_path": "models/shap_explainers/xgboost_explainer.pkl",
+        "train_size": 5860,
+        "test_size": 1466,
+        "timestamp": "2025-10-05_08-10-27"
+    },
+    "LightGBM": {
+        "accuracy": 0.9332,
+        "accuracy_percent": 93.32,
+        "model_path": "models/lightgbm_model.pkl",
+        "shap_explainer_path": "models/shap_explainers/lightgbm_explainer.pkl",
+        "train_size": 5860,
+        "test_size": 1466,
+        "timestamp": "2025-10-05_08-10-27"
+    },
+    "RandomForest": {
+        "accuracy": 0.9086,
+        "accuracy_percent": 90.86,
+        "model_path": "models/randomforest_model.pkl",
+        "shap_explainer_path": "models/shap_explainers/randomforest_explainer.pkl",
+        "train_size": 5860,
+        "test_size": 1466,
+        "timestamp": "2025-10-05_08-10-27"
+    }
+}

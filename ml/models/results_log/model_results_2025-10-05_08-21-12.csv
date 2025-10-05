@@ -1,0 +1,4 @@
+,accuracy,accuracy_percent,model_path,shap_explainer_path,train_size,test_size,timestamp
+XGBoost,0.9304,93.04,models/xgboost_model.pkl,models/shap_explainers/xgboost_explainer.pkl,5860,1466,2025-10-05_08-21-12
+LightGBM,0.9332,93.32,models/lightgbm_model.pkl,models/shap_explainers/lightgbm_explainer.pkl,5860,1466,2025-10-05_08-21-12
+RandomForest,0.9086,90.86,models/randomforest_model.pkl,models/shap_explainers/randomforest_explainer.pkl,5860,1466,2025-10-05_08-21-12
