@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Estelar y Simulación 3D</title>
+    <style>
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a1a;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        /* --- ESTILOS DE LA TABLA INICIAL (DATA-VIEW) --- */
+        #data-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a1a;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.5s;
+        }
+
+        #data-view.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        #data-table {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px 0;
+            border-collapse: collapse;
+            box-shadow: 0 0 30px rgba(79, 195, 247, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        #data-table th, #data-table td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid rgba(100, 150, 255, 0.1);
+        }
+        
+        #data-table th {
+            background-color: #1a237e;
+            color: #4fc3f7;
+            font-size: 1.1em;
+            text-transform: uppercase;
+        }
+        
+        #data-table td {
+            background-color: #121948;
+        }
+        
+        #data-table td:nth-child(even) {
+            background-color: #0d1232;
+        }
+
+        .category-header {
+            background-color: #0f121a !important;
+            color: #ff9800;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        
+        #start-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: linear-gradient(45deg, #4fc3f7, #2196f3);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.5);
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+        
+        #start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.7);
+        }
+        
+        /* --- ESTILOS DE LA SIMULACIÓN 3D (SCENE) --- */
+        #scene {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+        
+        .info-card {
+            position: absolute;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            width: 320px;
+            background: rgba(15, 20, 35, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            z-index: 100;
+        }
+        
+        .info-card.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(100, 150, 255, 0.3);
+        }
+        
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4fc3f7;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+        
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        .parameter {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(30, 40, 70, 0.5);
+            border-radius: 8px;
+            border-left: 3px solid #4fc3f7;
+        }
+        
+        .parameter label {
+            display: block;
+            margin-bottom: 5px;
+            color: #a0c8ff;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .parameter-value {
+            font-size: 16px;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 6px;
+            background: rgba(100, 150, 255, 0.3);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #4fc3f7;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(79, 195, 247, 0.8);
+        }
+        
+        .value-display {
+            width: 50px;
+            text-align: right;
+            margin-left: 10px;
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .info-text {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(30, 40, 70, 0.5);
+            border-radius: 8px;
+            border-left: 3px solid #ff9800;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #e0e0ff;
+        }
+        
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 300px;
+            z-index: 101;
+        }
+        
+        .hud h3 {
+            color: #4fc3f7;
+            margin-bottom: 10px;
+        }
+        
+        .zoom-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 101;
+        }
+        
+        .zoom-indicator.active {
+            opacity: 1;
+        }
+        
+        .color-picker {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .color-picker input {
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .button {
+            background: linear-gradient(to right, #4fc3f7, #2196f3);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .button:hover {
+            background: linear-gradient(to right, #29b6f6, #1976d2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .camera-controls {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            display: none; /* Ocultar por defecto */
+            gap: 10px;
+            z-index: 101;
+        }
+        
+        .camera-btn {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .camera-btn:hover {
+            background: rgba(79, 195, 247, 0.3);
+            border-color: #4fc3f7;
+        }
+        
+        .camera-btn.active {
+            background: rgba(79, 195, 247, 0.6);
+            border-color: #4fc3f7;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="data-view">
+        <h1 style="color:#4fc3f7; margin-bottom: 20px;">Catálogo Estelar y Exoplanetario</h1>
+        
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th colspan="2" class="category-header">Parámetros del Planeta (Ej. Exoplaneta TOI 700 d)</th>
+                    <th colspan="2" class="category-header">Propiedades de la Estrella (Ej. Enana Roja TOI 700)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. **Periodo Orbital (Koi Period)**</td>
+                    <td>37.42 días</td>
+                    <td>1. **Tipo de Estrella**</td>
+                    <td>Enana Roja (Tipo M) 🔴</td>
+                </tr>
+                <tr>
+                    <td>2. **Época de Tránsito (Transit Epoch)**</td>
+                    <td>2458882.5 (BJD)</td>
+                    <td>2. **Temperatura Efectiva Estelar**</td>
+                    <td>3,450 K</td>
+                </tr>
+                <tr>
+                    <td>3. **Parámetro de Impacto (Impact Parameter)**</td>
+                    <td>0.081</td>
+                    <td>3. **Gravedad Superficial Estelar**</td>
+                    <td>5.0 cgs (Log g)</td>
+                </tr>
+                <tr>
+                    <td>4. **Duración del Tránsito (Transit Duration)**</td>
+                    <td>2.3 horas</td>
+                    <td>4. **Radio Estelar (Stellar Radius)**</td>
+                    <td>0.45 Radio Solar ($\text{R}_\odot$)</td>
+                </tr>
+                <tr>
+                    <td>5. **Profundidad del Tránsito (Transit Depth)**</td>
+                    <td>145 ppm</td>
+                    <td>5. **Distancia**</td>
+                    <td>101.4 años luz</td>
+                </tr>
+                <tr>
+                    <td>6. **Radio Planetario (Planetary Radius)**</td>
+                    <td>1.18 Radio Terrestre ($\text{R}_\text{T}$)</td>
+                    <td>6. **Clasificación Espectral**</td>
+                    <td>M2.5 V</td>
+                </tr>
+                <tr>
+                    <td>7. **Temperatura de Equilibrio**</td>
+                    <td>268 K (-5°C)</td>
+                    <td>7. **Masa Estelar**</td>
+                    <td>0.50 Masa Solar ($\text{M}_\odot$)</td>
+                </tr>
+                <tr>
+                    <td>8. **Flujo de Insolación**</td>
+                    <td>0.86 Flujo Terrestre</td>
+                    <td>8. **Metalicidad**</td>
+                    <td>-0.10 [Fe/H]</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button id="start-button">Iniciar Simulación del Sistema 3D</button>
+    </div>
+
+    <canvas id="scene"></canvas>
+    
+    <div class="hud">
+        <h3>Sistema Solar 3D</h3>
+        <p>Haz clic en cualquier planeta para ver detalles</p>
+        <p>Arrastra para rotar la vista • Rueda del mouse para zoom</p>
+    </div>
+    
+    <div class="zoom-indicator" id="zoom-indicator">
+        Vista de <span id="zoom-object-name">Objeto</span>
+    </div>
+    
+    <div class="camera-controls" id="camera-controls">
+        <button class="camera-btn" id="camera-fixed" title="Cámara fija">🔒</button>
+        <button class="camera-btn" id="camera-orbit" title="Cámara orbital">🔄</button>
+    </div>
+    
+    <div class="info-card" id="info-card">
+        <div class="card-header">
+            <h2 class="card-title" id="card-title">Tierra</h2>
+            <button class="close-btn" id="close-btn">×</button>
+        </div>
+        
+        <div class="parameter">
+            <label for="object-size">Radio:</label>
+            <div class="parameter-value" id="radius-value">6,371 km</div>
+            <div class="slider-container">
+                <input type="range" id="object-size" min="0.5" max="3" step="0.1" value="1">
+                <span class="value-display" id="object-size-value">1.0</span>
+            </div>
+        </div>
+        
+        <div class="parameter">
+            <label for="object-tilt">Inclinación:</label>
+            <div class="parameter-value" id="tilt-value">23.5°</div>
+            <div class="slider-container">
+                <input type="range" id="object-tilt" min="0" max="45" step="0.5" value="23.5">
+                <span class="value-display" id="object-tilt-value">23.5°</span>
+            </div>
+        </div>
+        
+        <div class="parameter">
+            <label for="object-rotation">Rotación:</label>
+            <div class="parameter-value" id="rotation-value">24 horas</div>
+            <div class="slider-container">
+                <input type="range" id="object-rotation" min="0.1" max="5" step="0.1" value="1">
+                <span class="value-display" id="object-rotation-value">1.0</span>
+            </div>
+        </div>
+        
+        <div class="parameter">
+            <label for="object-orbit">Órbita:</label>
+            <div class="parameter-value" id="orbit-value">365 días</div>
+            <div class="slider-container">
+                <input type="range" id="object-orbit" min="0.5" max="3" step="0.1" value="1">
+                <span class="value-display" id="object-orbit-value">1.0</span>
+            </div>
+        </div>
+        
+        <div class="parameter">
+            <label for="object-distance">Distancia:</label>
+            <div class="parameter-value" id="distance-value">150 millones km</div>
+            <div class="slider-container">
+                <input type="range" id="object-distance" min="0.5" max="3" step="0.1" value="1">
+                <span class="value-display" id="object-distance-value">1.0</span>
+            </div>
+        </div>
+        
+        <div class="parameter">
+            <label for="object-color">Color:</label>
+            <div class="color-picker">
+                <input type="color" id="object-color" value="#2196f3">
+                <span id="object-color-value">#2196F3</span>
+            </div>
+        </div>
+        
+        <div class="info-text" id="info-text">
+            Tercer planeta desde el Sol y el único planeta conocido que alberga vida.
+        </div>
+        
+        <button class="button" id="reset-btn">Restablecer Valores</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    
+    <script>
+        // --- TEXTURAS (Asegúrate de que estas rutas sean correctas) ---
+        const SUN_CORE_TEXTURE_URL = 'Screenshot 2025-10-05 014517.jpg'; 
+        const SUN_ATMOSPHERE_TEXTURE_URL = 'Screenshot 2025-10-05 014541.jpg'; 
+
+        // Clase para manejar la cámara planetaria
+        class PlanetCamera {
+            constructor(camera, renderer) {
+                this.camera = camera;
+                this.renderer = renderer;
+                this.controls = null;
+                this.currentMode = 'orbit'; // 'orbit' o 'fixed'
+                this.targetObject = null;
+                this.isActive = false;
+                
+                this.initControls();
+            }
+            
+            initControls() {
+                // Controles orbitales estándar
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enableDamping = true;
+                this.controls.dampingFactor = 0.05;
+                this.controls.screenSpacePanning = false;
+                this.controls.minDistance = 2;
+                this.controls.maxDistance = 50;
+            }
+            
+            // Activar cámara en un objeto específico
+            activate(object, cameraPosition) {
+                this.targetObject = object;
+                this.isActive = true;
+                this.camera.position.copy(cameraPosition);
+                
+                const objectPosition = new THREE.Vector3();
+                object.getWorldPosition(objectPosition);
+                this.controls.target.copy(objectPosition);
+                this.controls.update();
+                
+                this.setMode('orbit');
+            }
+            
+            // Desactivar cámara
+            deactivate() {
+                this.isActive = false;
+                this.targetObject = null;
+                this.controls.reset();
+            }
+            
+            // Cambiar modo de cámara
+            setMode(mode) {
+                this.currentMode = mode;
+                
+                if (mode === 'fixed') {
+                    this.controls.enabled = false;
+                } else {
+                    this.controls.enabled = true;
+                }
+            }
+            
+            // Actualizar en cada frame (para modo fijo)
+            update() {
+                if (this.isActive && this.currentMode === 'fixed' && this.targetObject) {
+                    const objectPosition = new THREE.Vector3();
+                    this.targetObject.getWorldPosition(objectPosition);
+                    
+                    // Asegúrate de que la cámara esté mirando al objeto en modo fijo
+                    this.camera.lookAt(objectPosition);
+                }
+                
+                if (this.controls.enabled) {
+                    this.controls.update();
+                }
+            }
+        }
+
+        // Variables principales
+        let scene, camera, renderer, raycaster, mouse;
+        let sunCore, sunAtmosphere; // Sol dividido en capas
+        let earth, mars, jupiter;
+        let planetCamera;
+        let selectedObject = null;
+        let isZoomed = false;
+        let originalCameraPosition = new THREE.Vector3();
+        let animationInProgress = false;
+        const textureLoader = new THREE.TextureLoader();
+        
+        // Datos de los objetos
+        const objectsData = {
+            sun: {
+                name: "Sol",
+                radius: "696,340 km",
+                tilt: "7.25°",
+                rotation: "27 días",
+                orbit: "-",
+                distance: "-",
+                color: "#ff9800",
+                info: "Estrella central del Sistema Solar. Utiliza dos texturas superpuestas para simular las capas.",
+                size: 3,
+                tiltValue: 7.25,
+                rotationSpeed: 0.005,
+                orbitalSpeed: 0,
+                distanceValue: 0
+            },
+            earth: { /* ... datos de Tierra ... */
+                name: "Tierra", radius: "6,371 km", tilt: "23.5°", rotation: "24 horas", orbit: "365 días", distance: "150 millones km", color: "#2196f3", info: "Tercer planeta desde el Sol y el único planeta conocido que alberga vida.", size: 1, tiltValue: 23.5, rotationSpeed: 0.01, orbitalSpeed: 1, distanceValue: 8
+            },
+            mars: { /* ... datos de Marte ... */
+                name: "Marte", radius: "3,389 km", tilt: "25.2°", rotation: "24.6 horas", orbit: "687 días", distance: "228 millones km", color: "#ff5722", info: "Cuarto planeta desde el Sol, conocido como el planeta rojo.", size: 0.8, tiltValue: 25.2, rotationSpeed: 0.008, orbitalSpeed: 0.5, distanceValue: 12
+            },
+            jupiter: { /* ... datos de Júpiter ... */
+                name: "Júpiter", radius: "69,911 km", tilt: "3.1°", rotation: "9.9 horas", orbit: "12 años", distance: "778 millones km", color: "#ffb74d", info: "Quinto planeta desde el Sol y el más grande del Sistema Solar.", size: 2.2, tiltValue: 3.1, rotationSpeed: 0.015, orbitalSpeed: 0.2, distanceValue: 18
+            }
+        };
+        
+        // Parámetros actuales
+        let currentObjectData = {};
+        
+        // --- FUNCIÓN DE INICIO DE LA SIMULACIÓN 3D ---
+        function startSimulation() {
+            // Ocultar la vista de datos
+            document.getElementById('data-view').classList.add('hidden');
+
+            // Iniciar la escena Three.js
+            init();
+        }
+        
+        // Inicializar la escena Three.js
+        function init() {
+            // Crear escena
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
+            
+            // Crear cámara
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25;
+            originalCameraPosition.copy(camera.position);
+            
+            // Crear renderizador
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('scene'),
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            
+            // Inicializar cámara planetaria
+            planetCamera = new PlanetCamera(camera, renderer);
+            
+            // Configurar raycaster para selección de objetos
+            raycaster = new THREE.Raycaster();
+            mouse = new THREE.Vector2();
+            
+            // Añadir luces
+            const ambientLight = new THREE.AmbientLight(0x333333);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(5, 3, 5);
+            scene.add(directionalLight);
+            
+            // Crear objetos
+            createSun(); // Sol con capas
+            createEarth();
+            createMars();
+            createJupiter();
+            
+            // Crear trayectorias orbitales
+            createOrbitPaths();
+            
+            // Añadir estrellas de fondo
+            addStars();
+            
+            // Configurar event listeners
+            setupEventListeners();
+            
+            // Iniciar animación
+            animate();
+        }
+        
+        // Crear el sol con dos capas (el cambio solicitado anteriormente)
+        function createSun() {
+            const sunSize = objectsData.sun.size;
+
+            // 1. Cargar texturas con manejo de errores
+            const sunCoreTexture = textureLoader.load(SUN_CORE_TEXTURE_URL, 
+                () => console.log('Textura de núcleo (Imagen 1) cargada'), 
+                undefined, 
+                (err) => console.error('Error cargando textura de núcleo:', err)
+            );
+            const sunAtmosphereTexture = textureLoader.load(SUN_ATMOSPHERE_TEXTURE_URL,
+                () => console.log('Textura de atmósfera (Imagen 2) cargada'),
+                undefined,
+                (err) => console.error('Error cargando textura de atmósfera:', err)
+            );
+
+            sunCoreTexture.wrapS = sunCoreTexture.wrapT = THREE.RepeatWrapping;
+            sunAtmosphereTexture.wrapS = sunAtmosphereTexture.wrapT = THREE.RepeatWrapping;
+
+
+            // --- Capa del Núcleo del Sol (Imagen 1) ---
+            const sunGeometry = new THREE.SphereGeometry(sunSize, 64, 64);
+            const sunCoreMaterial = new THREE.MeshBasicMaterial({
+                map: sunCoreTexture,
+                emissive: new THREE.Color(0xffffff), 
+                emissiveIntensity: 1.0 
+            });
+            sunCore = new THREE.Mesh(sunGeometry, sunCoreMaterial);
+            sunCore.name = "sunCore";
+            sunCore.userData.type = "sun"; // Usamos 'sun' como tipo para la tarjeta de info
+            sunCore.userData.originalData = {...objectsData.sun};
+            scene.add(sunCore);
+
+            // --- Capa de la Atmósfera del Sol (Imagen 2) ---
+            const atmosphereGeometry = new THREE.SphereGeometry(sunSize * 1.01, 64, 64); // 1% más grande
+            const sunAtmosphereMaterial = new THREE.MeshStandardMaterial({
+                map: sunAtmosphereTexture,
+                emissive: new THREE.Color(0xff9900),
+                emissiveMap: sunAtmosphereTexture, 
+                emissiveIntensity: 1.0, 
+                transparent: true,
+                opacity: 0.8,      
+                blending: THREE.AdditiveBlending 
+            });
+            sunAtmosphere = new THREE.Mesh(atmosphereGeometry, sunAtmosphereMaterial);
+            sunAtmosphere.name = "sunAtmosphere";
+            sunAtmosphere.userData.type = "sun";
+            sunAtmosphere.userData.originalData = {...objectsData.sun};
+            scene.add(sunAtmosphere);
+        }
+
+        // Crear los planetas
+        function createEarth() { /* ... */
+            const data = objectsData.earth;
+            const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+            const material = new THREE.MeshPhongMaterial({
+                color: new THREE.Color().setHex(parseInt(data.color.replace('#', ''), 16)),
+                shininess: 30
+            });
+            earth = new THREE.Mesh(geometry, material);
+            earth.name = "earth";
+            earth.userData.type = "earth";
+            earth.userData.originalData = {...data};
+            earth.position.x = data.distanceValue;
+            earth.rotation.z = data.tiltValue * Math.PI / 180;
+            scene.add(earth);
+        }
+        
+        function createMars() { /* ... */
+            const data = objectsData.mars;
+            const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+            const material = new THREE.MeshPhongMaterial({
+                color: new THREE.Color().setHex(parseInt(data.color.replace('#', ''), 16)),
+                shininess: 30
+            });
+            mars = new THREE.Mesh(geometry, material);
+            mars.name = "mars";
+            mars.userData.type = "mars";
+            mars.userData.originalData = {...data};
+            mars.position.x = data.distanceValue;
+            mars.rotation.z = data.tiltValue * Math.PI / 180;
+            scene.add(mars);
+        }
+        
+        function createJupiter() { /* ... */
+            const data = objectsData.jupiter;
+            const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+            const material = new THREE.MeshPhongMaterial({
+                color: new THREE.Color().setHex(parseInt(data.color.replace('#', ''), 16)),
+                shininess: 30
+            });
+            jupiter = new THREE.Mesh(geometry, material);
+            jupiter.name = "jupiter";
+            jupiter.userData.type = "jupiter";
+            jupiter.userData.originalData = {...data};
+            jupiter.position.x = data.distanceValue;
+            jupiter.rotation.z = data.tiltValue * Math.PI / 180;
+            scene.add(jupiter);
+        }
+        
+        // Crear trayectorias orbitales
+        function createOrbitPaths() {
+            const planets = [earth, mars, jupiter];
+            const colors = [0x4444ff, 0xff4444, 0xffaa44];
+            
+            planets.forEach((planet, index) => {
+                const orbitGeometry = new THREE.RingGeometry(
+                    planet.userData.originalData.distanceValue, 
+                    planet.userData.originalData.distanceValue + 0.05, 
+                    64
+                );
+                const orbitMaterial = new THREE.MeshBasicMaterial({
+                    color: colors[index],
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.2
+                });
+                
+                const orbit = new THREE.Mesh(orbitGeometry, orbitMaterial);
+                orbit.rotation.x = Math.PI / 2;
+                scene.add(orbit);
+            });
+        }
+        
+        // Añadir estrellas de fondo
+        function addStars() {
+            const geometry = new THREE.BufferGeometry();
+            const material = new THREE.PointsMaterial({
+                color: 0xffffff,
+                size: 0.1,
+                transparent: true
+            });
+            
+            const vertices = [];
+            for (let i = 0; i < 2000; i++) {
+                const x = (Math.random() - 0.5) * 200;
+                const y = (Math.random() - 0.5) * 200;
+                const z = (Math.random() - 0.5) * 200;
+                vertices.push(x, y, z);
+            }
+            
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            const stars = new THREE.Points(geometry, material);
+            scene.add(stars);
+        }
+        
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Evento para el botón de iniciar
+            document.getElementById('start-button').addEventListener('click', startSimulation);
+
+            // Evento de clic para seleccionar objetos (después de que la simulación inicie)
+            if(renderer) { // Solo si la escena 3D ya está inicializada
+                renderer.domElement.addEventListener('click', onMouseClick, false);
+            }
+            
+            // Eventos para los controles deslizantes
+            document.getElementById('object-size').addEventListener('input', updateObjectSize);
+            document.getElementById('object-tilt').addEventListener('input', updateObjectTilt);
+            document.getElementById('object-rotation').addEventListener('input', updateObjectRotation);
+            document.getElementById('object-orbit').addEventListener('input', updateObjectOrbit);
+            document.getElementById('object-distance').addEventListener('input', updateObjectDistance);
+            document.getElementById('object-color').addEventListener('input', updateObjectColor);
+            
+            // Evento para el botón de restablecer
+            document.getElementById('reset-btn').addEventListener('click', resetObjectValues);
+            
+            // Evento para el botón de cerrar
+            document.getElementById('close-btn').addEventListener('click', backToGeneralView);
+            
+            // Eventos para controles de cámara
+            document.getElementById('camera-fixed').addEventListener('click', () => setCameraMode('fixed'));
+            document.getElementById('camera-orbit').addEventListener('click', () => setCameraMode('orbit'));
+            
+            // Evento para redimensionar ventana
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        // --- FUNCIONES DE LÓGICA 3D (igual que el código anterior) ---
+        function onMouseClick(event) {
+            if (animationInProgress) return;
+            
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            
+            // Intersectar con sunCore, sunAtmosphere y planetas
+            const objectsToIntersect = [sunCore, sunAtmosphere, earth, mars, jupiter];
+            const intersects = raycaster.intersectObjects(objectsToIntersect);
+            
+            if (intersects.length > 0) {
+                // Si el objeto intersectado es una de las capas del sol, seleccionamos el sol
+                const clickedObject = intersects[0].object.userData.type === "sun" ? sunCore : intersects[0].object;
+
+                if (isZoomed && selectedObject !== clickedObject) {
+                    zoomToObject(clickedObject);
+                } 
+                else if (!isZoomed) {
+                    zoomToObject(clickedObject);
+                }
+            }
+        }
+        
+        function zoomToObject(object) {
+            if (animationInProgress) return;
+            
+            animationInProgress = true;
+            selectedObject = object;
+            isZoomed = true;
+            
+            const objectPosition = new THREE.Vector3();
+            object.getWorldPosition(objectPosition);
+            
+            const direction = new THREE.Vector3();
+            direction.subVectors(objectPosition, camera.position).normalize();
+            
+            const zoomDistance = object.userData.type === "sun" ? 
+                objectsData.sun.size * 2.5 : 
+                objectsData[object.userData.type].size * 4;
+            
+            const targetPosition = new THREE.Vector3();
+            targetPosition.copy(objectPosition);
+            targetPosition.addScaledVector(direction, -zoomDistance);
+            
+            updateInfoCard(object.userData.type);
+            
+            const zoomIndicator = document.getElementById('zoom-indicator');
+            const zoomObjectName = document.getElementById('zoom-object-name');
+            zoomObjectName.textContent = objectsData[object.userData.type].name;
+            zoomIndicator.classList.add('active');
+            
+            // Mostrar u ocultar controles de cámara
+            const cameraControls = document.getElementById('camera-controls');
+            if (object.userData.type !== "sun") {
+                cameraControls.style.display = 'flex';
+            } else {
+                cameraControls.style.display = 'none';
+            }
+
+            // Animación suave de la cámara
+            const startPosition = camera.position.clone();
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+                t -= 1;
+                return t * t * t + 1;
+            }
+
+            function animateZoom(time) {
+                const elapsed = time - startTime;
+                const progress = Math.min(1, elapsed / duration);
+                const easedProgress = easeOutCubic(progress);
+
+                camera.position.lerpVectors(startPosition, targetPosition, easedProgress);
+                camera.lookAt(objectPosition);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateZoom);
+                } else {
+                    animationInProgress = false;
+                    // Activar la cámara planetaria una vez que el zoom termina
+                    planetCamera.activate(object, camera.position.clone());
+                    document.getElementById('info-card').classList.add('active');
+                }
+            }
+            requestAnimationFrame(animateZoom);
+        }
+
+        // ... (el resto de las funciones de lógica 3D son las mismas: backToGeneralView, updateInfoCard, updateObjectSize, etc.)
+
+        function backToGeneralView() {
+            if (animationInProgress) return;
+            
+            animationInProgress = true;
+            isZoomed = false;
+            planetCamera.deactivate(); // Desactivar cámara planetaria
+            selectedObject = null;
+            
+            document.getElementById('info-card').classList.remove('active');
+            document.getElementById('zoom-indicator').classList.remove('active');
+            document.getElementById('camera-controls').style.display = 'none';
+
+            // Animación de regreso a la vista general
+            const startPosition = camera.position.clone();
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+                t -= 1;
+                return t * t * t + 1;
+            }
+
+            function animateBack(time) {
+                const elapsed = time - startTime;
+                const progress = Math.min(1, elapsed / duration);
+                const easedProgress = easeOutCubic(progress);
+
+                camera.position.lerpVectors(startPosition, originalCameraPosition, easedProgress);
+                camera.lookAt(new THREE.Vector3(0, 0, 0)); // Mirar al sol
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateBack);
+                } else {
+                    animationInProgress = false;
+                    // Restablecer OrbitControls para la vista general
+                    planetCamera.initControls();
+                }
+            }
+            requestAnimationFrame(animateBack);
+        }
+
+        function updateInfoCard(objectType) {
+            const data = objectsData[objectType];
+            currentObjectData = data;
+            
+            document.getElementById('card-title').textContent = data.name;
+            document.getElementById('radius-value').textContent = data.radius;
+            document.getElementById('tilt-value').textContent = data.tilt;
+            document.getElementById('rotation-value').textContent = data.rotation;
+            document.getElementById('orbit-value').textContent = data.orbit;
+            document.getElementById('distance-value').textContent = data.distance;
+            document.getElementById('info-text').textContent = data.info;
+            
+            // Sliders: Establecer valores iniciales
+            document.getElementById('object-size').value = data.size;
+            document.getElementById('object-size-value').textContent = data.size.toFixed(1);
+
+            document.getElementById('object-tilt').value = data.tiltValue;
+            document.getElementById('object-tilt-value').textContent = data.tiltValue.toFixed(1) + '°';
+
+            document.getElementById('object-rotation').value = data.rotationSpeed / objectsData.earth.rotationSpeed;
+            document.getElementById('object-rotation-value').textContent = (data.rotationSpeed / objectsData.earth.rotationSpeed).toFixed(1);
+            
+            // Ocultar sliders irrelevantes para el Sol
+            const isSun = objectType === 'sun';
+            document.getElementById('object-orbit').closest('.parameter').style.display = isSun ? 'none' : 'block';
+            document.getElementById('object-distance').closest('.parameter').style.display = isSun ? 'none' : 'block';
+            
+            if (!isSun) {
+                document.getElementById('object-orbit').value = data.orbitalSpeed;
+                document.getElementById('object-orbit-value').textContent = data.orbitalSpeed.toFixed(1);
+                
+                document.getElementById('object-distance').value = data.distanceValue / objectsData.earth.distanceValue;
+                document.getElementById('object-distance-value').textContent = (data.distanceValue / objectsData.earth.distanceValue).toFixed(1);
+            }
+            
+            document.getElementById('object-color').value = data.color;
+            document.getElementById('object-color-value').textContent = data.color.toUpperCase();
+        }
+
+        function updateObjectSize(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('object-size-value').textContent = value.toFixed(1);
+            if (selectedObject) {
+                // Reemplazar la geometría para cambiar el radio del planeta
+                const newRadius = currentObjectData.originalData.size * value;
+                const newGeometry = new THREE.SphereGeometry(newRadius, 32, 32);
+                selectedObject.geometry.dispose();
+                selectedObject.geometry = newGeometry;
+
+                // Si es el sol, actualizar ambas capas
+                if (selectedObject.userData.type === 'sun') {
+                    const newAtmosphereGeometry = new THREE.SphereGeometry(newRadius * 1.01, 64, 64);
+                    sunAtmosphere.geometry.dispose();
+                    sunAtmosphere.geometry = newAtmosphereGeometry;
+                }
+            }
+        }
+
+        function updateObjectTilt(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('object-tilt-value').textContent = value.toFixed(1) + '°';
+            if (selectedObject) {
+                selectedObject.rotation.z = value * Math.PI / 180;
+                if (selectedObject.userData.type === 'sun') {
+                     sunAtmosphere.rotation.z = value * Math.PI / 180;
+                }
+            }
+        }
+
+        function updateObjectRotation(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('object-rotation-value').textContent = value.toFixed(1);
+            if (selectedObject) {
+                currentObjectData.rotationSpeed = objectsData.earth.rotationSpeed * value;
+            }
+        }
+
+        function updateObjectOrbit(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('object-orbit-value').textContent = value.toFixed(1);
+            if (selectedObject && selectedObject.userData.type !== 'sun') {
+                currentObjectData.orbitalSpeed = value;
+            }
+        }
+
+        function updateObjectDistance(event) {
+            const value = parseFloat(event.target.value);
+            document.getElementById('object-distance-value').textContent = value.toFixed(1);
+            if (selectedObject && selectedObject.userData.type !== 'sun') {
+                const newDistance = objectsData.earth.distanceValue * value;
+                selectedObject.position.x = newDistance;
+
+                // Actualizar el radio de la órbita visual (se haría mejor eliminando y recreando)
+                // Esto es complejo de actualizar en Three.js sin recrear. Por simplicidad, se omite la actualización visual de la órbita.
+            }
+        }
+
+        function updateObjectColor(event) {
+            const color = event.target.value;
+            document.getElementById('object-color-value').textContent = color.toUpperCase();
+            if (selectedObject) {
+                const newColor = new THREE.Color().setHex(parseInt(color.replace('#', ''), 16));
+                selectedObject.material.color.copy(newColor);
+
+                if (selectedObject.userData.type === 'sun') {
+                    // Si es el sol, actualizamos el color emisivo de la capa exterior (Imagen 2)
+                    sunAtmosphere.material.emissive.copy(newColor);
+                }
+            }
+        }
+
+        function resetObjectValues() {
+            if (!selectedObject) return;
+            
+            const originalData = selectedObject.userData.originalData;
+            
+            // Restablecer tamaño
+            const originalRadius = originalData.size;
+            const originalGeometry = new THREE.SphereGeometry(originalRadius, 32, 32);
+            selectedObject.geometry.dispose();
+            selectedObject.geometry = originalGeometry;
+
+            // Si es el sol, restablecer ambas capas
+            if (selectedObject.userData.type === 'sun') {
+                const originalAtmosphereGeometry = new THREE.SphereGeometry(originalRadius * 1.01, 64, 64);
+                sunAtmosphere.geometry.dispose();
+                sunAtmosphere.geometry = originalAtmosphereGeometry;
+            }
+            
+            // Restablecer inclinación y color
+            selectedObject.rotation.z = originalData.tiltValue * Math.PI / 180;
+            const originalColor = new THREE.Color().setHex(parseInt(originalData.color.replace('#', ''), 16));
+            selectedObject.material.color.copy(originalColor);
+
+            if (selectedObject.userData.type === 'sun') {
+                sunAtmosphere.rotation.z = originalData.tiltValue * Math.PI / 180;
+                sunAtmosphere.material.emissive.copy(originalColor);
+            }
+            
+            // Restablecer velocidades y distancia
+            currentObjectData.rotationSpeed = originalData.rotationSpeed;
+            currentObjectData.orbitalSpeed = originalData.orbitalSpeed;
+
+            if (selectedObject.userData.type !== 'sun') {
+                selectedObject.position.x = originalData.distanceValue;
+                // Nota: La órbita visual no se restablece fácilmente sin recrearla.
+            }
+            
+            // Volver a cargar la tarjeta de información para actualizar los sliders
+            updateInfoCard(selectedObject.userData.type);
+        }
+
+        function setCameraMode(mode) {
+            if (!selectedObject) return;
+            
+            planetCamera.setMode(mode);
+            
+            // Actualizar botones de control
+            document.getElementById('camera-fixed').classList.remove('active');
+            document.getElementById('camera-orbit').classList.remove('active');
+            document.getElementById(`camera-${mode}`).classList.add('active');
+
+            if (mode === 'fixed') {
+                planetCamera.setMode('fixed');
+            } else {
+                planetCamera.setMode('orbit');
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // --- BUCLE DE ANIMACIÓN ---
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            const secondsPerDay = 0.01;
+
+            // Rotación del sol (ambas capas)
+            if (sunCore && sunAtmosphere) {
+                sunCore.rotation.y += objectsData.sun.rotationSpeed;
+                sunAtmosphere.rotation.y += objectsData.sun.rotationSpeed;
+            }
+            
+            // Mover y rotar planetas
+            const planets = [earth, mars, jupiter];
+            planets.forEach(planet => {
+                const data = planet.userData.originalData;
+
+                // Rotación propia
+                planet.rotation.y += currentObjectData === data ? currentObjectData.rotationSpeed : data.rotationSpeed;
+
+                // Órbita
+                const orbitalSpeed = currentObjectData === data ? currentObjectData.orbitalSpeed * secondsPerDay : data.orbitalSpeed * secondsPerDay;
+                const distanceValue = currentObjectData === data ? planet.position.length() : data.distanceValue;
+
+                planet.position.x = Math.cos(time * orbitalSpeed) * distanceValue;
+                planet.position.z = Math.sin(time * orbitalSpeed) * distanceValue;
+            });
+            
+            // Actualizar controles de cámara
+            planetCamera.update();
+                
+            // Renderizar escena
+            if (renderer) {
+                renderer.render(scene, camera);
+            }
+        }
+        
+        // Inicializar la vista de datos (NO la escena 3D) al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+             // El init() real se llama solo al hacer clic en el botón.
+             console.log("Tabla de datos cargada. Haz clic en 'Iniciar Simulación 3D'.");
+        });
+    </script>
+</body>
+</html>

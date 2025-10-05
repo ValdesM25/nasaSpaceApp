@@ -330,3 +330,91 @@ tbody tr[data-href] {
 tbody tr[data-href]:hover {
   background-color: rgba(255, 255, 255, 0.03);
 }
+
+/*-----------------------------------------------------
+/* --- Estilo general para todas las tarjetas con fondo --- */
+.model-card .first-content {
+    /* Ajustes para la imagen de fondo */
+    background-size: cover;
+    background-position: center;
+
+    /* ... el resto de tus estilos para .first-content ... */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    /* ... etc ... */
+}
+
+.model-card .first-content span {
+    position: relative;
+    z-index: 2; /* Asegura que el texto esté por encima del fondo */
+}
+
+
+/* --- Asignación de imagen específica para cada tarjeta --- */
+/* Aquí ocurre la magia: apilamos una capa de color sobre la imagen */
+
+#rf-card {
+  background-image: 
+    linear-gradient(rgba(12, 10, 29, 0.6), rgba(12, 10, 29, 0.6)), 
+    url('/static/1.png');
+}
+
+#dl-card {
+  background-image: 
+    linear-gradient(rgba(12, 10, 29, 0.6), rgba(12, 10, 29, 0.6)), 
+    url('/static/4.png');
+}
+
+#xgb-card {
+  background-image: 
+    linear-gradient(rgba(12, 10, 29, 0.6), rgba(12, 10, 29, 0.6)), 
+    url('/static/2.png');
+}
+
+#lr-card {
+  background-image: 
+    linear-gradient(rgba(12, 10, 29, 0.6), rgba(12, 10, 29, 0.6)), 
+    url('/static/5.png');
+}
+
+#km-card {
+  background-image: 
+    linear-gradient(rgba(12, 10, 29, 0.6), rgba(12, 10, 29, 0.6)), 
+    url('/static/3.png');
+}
+
+
+/* ============================= */
+/* BOTÓN FLOTANTE DE INICIO      */
+/* ============================= */
+#botonInicioContainer {
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+    z-index: 50;
+}
+#botonInicio {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* Estilos para el icono */
+    font-size: 30px; /* Tamaño del icono */
+    color: #e5e7eb;  /* Color del icono (gris claro) */
+}
+#botonInicio:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ELIMINA ESTA REGLA si ya
