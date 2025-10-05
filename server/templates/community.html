@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exosis - Comunidad</title>
+    <title>Exosys - Community</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
-    
+        <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              // Hacemos que 'sans' sea Space Grotesk por defecto
+              // We make 'sans' the default Space Grotesk font
               'sans': ['Space Grotesk', 'sans-serif'],
             }
           }
@@ -45,29 +45,29 @@
                             <i class="fa-solid fa-user-astronaut"></i>
                         </div>
                         <div>
-                            <h2 class="text-xl font-bold text-white">Nombre de Usuario</h2>
+                            <h2 class="text-xl font-bold text-white">Username</h2>
                             <p class="text-sm text-gray-400">Planet Hunter</p>
                         </div>
                     </div>
                     <div class="mt-6 space-y-3">
-                        <a href="#" class="block text-gray-300 hover:text-indigo-400 transition-colors">Mi Perfil</a>
-                        <a href="#" class="block text-gray-300 hover:text-indigo-400 transition-colors">Configuración</a>
-                        <a href="#" class="block text-red-500 hover:text-red-400 transition-colors">Cerrar Sesión</a>
+                        <a href="#" class="block text-gray-300 hover:text-indigo-400 transition-colors">My Profile</a>
+                        <a href="#" class="block text-gray-300 hover:text-indigo-400 transition-colors">Settings</a>
+                        <a href="#" class="block text-red-500 hover:text-red-400 transition-colors">Log Out</a>
                     </div>
                 </div>
 
                 <div class="bg-white/5 border border-indigo-500/30 rounded-xl p-6 backdrop-blur-sm">
-                    <h3 class="text-lg font-bold text-white mb-4">Buscar Modelos</h3>
+                    <h3 class="text-lg font-bold text-white mb-4">Search Models</h3>
                     <input
                       type="text"
-                      placeholder="Nombre del modelo..."
+                      placeholder="Model name..."
                       class="w-full h-12 px-4 bg-white/10 border border-indigo-500/30 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 rounded-lg text-white placeholder:text-gray-400 backdrop-blur-sm"
                     />
                 </div>
             </div>
 
             <div class="lg:col-span-2 bg-white/5 border border-indigo-500/30 rounded-xl p-6 backdrop-blur-sm">
-                <h3 class="text-lg font-bold text-white mb-4">Noticias de la Comunidad</h3>
+                <h3 class="text-lg font-bold text-white mb-4">Community News</h3>
                 
                 <div class="space-y-6">
                     
@@ -76,8 +76,8 @@
                            <i class="fa-solid fa-satellite"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white">Actualización del Sistema Exosis v2.1</h4>
-                            <p class="text-gray-400 text-sm">Se han implementado nuevas optimizaciones en el renderizado de exoplanetas. El rendimiento ha mejorado un 15%.</p>
+                            <h4 class="font-bold text-white">Exosis System Update v2.1</h4>
+                            <p class="text-gray-400 text-sm">New optimizations for exoplanet rendering have been implemented. Performance has improved by 15%.</p>
                         </div>
                     </div>
 
@@ -86,8 +86,8 @@
                            <i class="fa-solid fa-rocket"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white">Nueva Misión Comunitaria: "Cazadores de Kepler"</h4>
-                            <p class="text-gray-400 text-sm">Únete al esfuerzo global para analizar los datos del telescopio Kepler y descubre nuevos mundos. ¡Hay recompensas!</p>
+                            <h4 class="font-bold text-white">New Community Mission: "Kepler Hunters"</h4>
+                            <p class="text-gray-400 text-sm">Join the global effort to analyze Kepler telescope data and discover new worlds. Rewards are available!</p>
                         </div>
                     </div>
                     
@@ -96,8 +96,8 @@
                            <i class="fa-solid fa-circle-nodes"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white">Mantenimiento programado de servidores</h4>
-                            <p class="text-gray-400 text-sm">Habrá una breve interrupción del servicio el próximo martes para mejorar nuestra infraestructura de red.</p>
+                            <h4 class="font-bold text-white">Scheduled Server Maintenance</h4>
+                            <p class="text-gray-400 text-sm">There will be a brief service interruption next Tuesday to upgrade our network infrastructure.</p>
                         </div>
                     </div>
 
@@ -107,5 +107,26 @@
         </div>
     </div>
 
-</body>
+
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+
+    <div id="botonInicio" class="relative w-full h-8 bg-white-100">
+        <div class="absolute bottom-8 left-6 w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center hover:bg-white transition transform hover:scale-105 cursor-pointer">
+            <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Icon" class="w-10 h-10">
+        </div>
+        <script>
+          const botonInicio = document.getElementById('botonInicio');
+          botonInicio.addEventListener('click', (el) => {
+            el.preventDefault();
+            window.location.href = "/inicio"; // Redirects relative to the domain root
+          });
+        </script>
+    </div>
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+   <!-- =========================================================  -->
+
+    </body>
 </html>
