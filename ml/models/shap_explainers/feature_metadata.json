@@ -1,0 +1,28 @@
+{
+    "feature_names": [
+        "transit_period",
+        "transit_duration",
+        "transit_depth",
+        "planet_radius",
+        "star_temperature",
+        "star_radius",
+        "star_surface_gravity",
+        "star_brightness",
+        "period_duration_ratio",
+        "snr_approximation",
+        "depth_discrepancy",
+        "star_luminosity",
+        "transit_probability",
+        "log_transit_depth",
+        "log_transit_period"
+    ],
+    "class_names": [
+        "CONFIRMED",
+        "FALSE POSITIVE"
+    ],
+    "target_mapping": {
+        "0": "CONFIRMED",
+        "1": "FALSE POSITIVE"
+    },
+    "timestamp": "2025-10-05_08-21-12"
+}

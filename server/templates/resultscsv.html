@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Model Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-indigo-950 to-indigo-800 text-gray-100 flex flex-col items-center py-10">
+
+    <div class="w-full max-w-5xl bg-indigo-900/40 backdrop-blur-md border border-indigo-700 rounded-2xl shadow-2xl p-8">
+        <h1 class="text-3xl font-bold text-indigo-300 text-center mb-6">
+            🧠 Model Results — {{ data.model }}
+        </h1>
+
+        <table class="w-full text-left border-collapse border border-indigo-700/50">
+            <thead class="bg-indigo-800/80 text-indigo-200 uppercase text-sm tracking-wider">
+                <tr>
+                    <th class="py-3 px-4 border border-indigo-700/50">Index</th>
+                    <th class="py-3 px-4 border border-indigo-700/50">Probability Confirmed</th>
+                    <th class="py-3 px-4 border border-indigo-700/50">Prediction</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in data.results %}
+                <tr class="hover:bg-indigo-700/40 transition">
+                    <td class="py-3 px-4 border border-indigo-700/50 text-center">{{ r.index }}</td>
+                    <td class="py-3 px-4 border border-indigo-700/50 text-center">
+                        {{ "%.2f"|format(r.probability_confirmed * 100) }}%
+                    </td>
+                    <td class="py-3 px-4 border border-indigo-700/50 text-center">
+                        {% if r.prediction == "CONFIRMED" %}
+                            <span class="bg-green-600/40 text-green-300 font-semibold px-3 py-1 rounded-xl shadow-md">CONFIRMED</span>
+                        {% else %}
+                            <span class="bg-red-600/40 text-red-300 font-semibold px-3 py-1 rounded-xl shadow-md">FALSE POSITIVE</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

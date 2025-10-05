@@ -1,13 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for
+
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import pandas as pd
 import io
 from flask_cors import CORS # Importa la librería
 
-
 #from server.memory import retornodf
-#from ml.inference import predict_exoplanet
+from ml.inference import predict_exoplanet
 
-app = Flask(__name__)
+# retorno modelo df
+retornodf = 7
+
+app = Flask(
+    __name__,
+    template_folder="server/templates",  # relative path from run.py
+    static_folder="server/static"        # relative path from run.py
+)
 
 # login
 @app.route("/")
@@ -40,6 +47,7 @@ def predict():
     nombre_modelo_actual = request.form.get('modelo_seleccionado')
 
     try:
+        global retornodf
         csv_data = io.StringIO(file.stream.read().decode("UTF8"))
         df = pd.read_csv(csv_data)
         
@@ -52,9 +60,9 @@ def predict():
         # guardar en memoria, kepler.csv funciona bien
         # ####################################################
         df_almacenado = df
-        print(df_almacenado)
 
-        res = predict_exoplanet(df_almacenado)
+        res = predict_exoplanet(df_almacenado, 'random_forest')
+        print("res", res)
         retornodf = res
         # ####################################################
         # llamar al modelo
@@ -73,14 +81,20 @@ def predict():
 # --- RUTA /predict MODIFICADA ---
 # --- RUTA /predict MODIFICADA ---
 # --- RUTA /predict MODIFICADA ---
-@app.route('/dfres', methods=['GET'])
+@app.route('/dfres')
 def dfres():
-    temp = retornodf
-    return jsonify(temp)
+    #temp = retornodf
+    #print('!!!!!!!!!!!!!!!!', temp)
+    
+    return str(retornodf)
+    #return render_template('predict.html', data=retornodf, )
 
 @app.route("/community")
 def community():
     return render_template("community.html")
+@app.route("/results")
+def results():
+    return render_template("resultscsv.html")
 
 # main
 app.run(debug=True)
@@ -98,3 +112,5 @@ def get_planetas():
     return jsonify(datos)
 
 #<button type="submit" class="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg transition #duration-300 shadow-lg hover:shadow-indigo-500/50">Enter Orbit</button>
+
+

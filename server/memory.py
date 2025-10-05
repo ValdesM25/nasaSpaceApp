@@ -4,8 +4,7 @@ import pandas as pd
 df_almacenado = None
 # Variable global para guardar el nombre del modelo
 modelo_seleccionado = None
-# retorno modelo df
-retornodf = None
+
 
 def set_dataframe(df):
     """Guarda el DataFrame."""

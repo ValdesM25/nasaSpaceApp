@@ -23,25 +23,33 @@
     <div class="card">
         <h2>Dataset Visualization</h2>
         <div class="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  {% for header in headers %}
-                    <th>{{ header }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in data %}
-                <tr>
-                  {% for cell in row %}
-                    <td>{{ cell }}</td>
-                  {% endfor %}
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-        </div>
+    <table>
+      <thead>
+        <tr>
+          {% for header in headers %}
+            <th>{{ header }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in data %}
+        <tr>
+          {% for cell in row %}
+            <td>{{ cell }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+<!-- Botón nuevo -->
+<div class="table-button">
+    <button id="sendRequestBtn" class="btn btn-secondary">
+        Send Request
+    </button>
+</div>
+
     </div>
   </div>
 
