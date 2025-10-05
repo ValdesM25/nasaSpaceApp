@@ -91,6 +91,9 @@ def dfres():
 @app.route("/community")
 def community():
     return render_template("community.html")
+@app.route("/results")
+def results():
+    return render_template("resultscsv.html")
 
 # main
 app.run(debug=True)
