@@ -6,11 +6,18 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return render_template("login.html")
-# mandar al modelo
-@app.route("/modelo")
-def modelo():
+# crear proyecto/cargar desde una plantilla
+@app.route("/inicio")
+def inicio():
     return render_template("modelo.html", prueba="")
+# mandar al modelo
+@app.route("/dashboard")
+def modelo():
+    return render_template("dashboard.html", prueba="")
 
+@app.route("/community")
+def community():
+    return render_template("community.html")
 
 # main
 app.run(debug=True)

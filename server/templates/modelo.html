@@ -1,247 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pantalla tipo Word</title>
-  <style>
-    :root {
-      --bg:#1f2933;--panel:#23272b;--muted:#9aa4ad;--accent:#0b5ed7;
-      --card:#111214;--surface:#151617;--glass:rgba(255,255,255,0.03);
-      --radius:12px;
-      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    }
-    * { box-sizing:border-box }
-    html,body {
-      height:100%; margin:0;
-      background:linear-gradient(180deg,var(--bg),#121416);
-      color:#e6eef6;
-    }
-    .container { max-width:1200px; margin:28px auto; padding:24px; }
-
-    header { display:flex; align-items:center; gap:24px }
-    h1 { font-size:18px; margin:0; color:#fff }
-    .templates { display:flex; gap:20px; padding:20px 0; flex-wrap:wrap }
-
-    /* === BOTÓN Nuevo Proyectoo === */
-button {
-  padding: 15px 30px 15px 50px;
-  background: #181c35;
-  border-radius: 30px;
-  display: flex;
-  position: relative;
-  color: #fff;
-  font-weight: 400;
-  overflow: hidden;
-  transition: all ease-in-out .5s;
-  border: #ffffff56 solid 1px;
-  box-shadow: #51eafd 0px 0px 50px -15px;
-}
-
-button:before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: -90%;
-  left: -90%;
-  filter: blur(20px);
-  background: #a11ee3;
-}
-
-button:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  bottom: -90%;
-  right: -90%;
-  filter: blur(20px);
-  background: #51eafd;
-}
-
-button .icon {
-  transform: scale(0.07);
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 14px;
-  top: 2px;
-  transition: all ease-in-out .5s;
-  z-index: 9;
-  rotate: 45deg
-}
-
-button .icon path {
-  fill: #fff;
-}
-
-button .launch {
-  background: #fff;
-  width: 300px;
-  height: 300px;
-  rotate: 45deg;
-  position: absolute;
-  left: -9px;
-  top: 550%;
-  z-index: 0;
-  transform: translateX(-56%);
-  transition: all ease-in-out 1s;
-}
-
-button .text {
-  z-index: 9;
-  transition: all ease-in-out .3s;
-}
-
-button:hover .icon {
-  transform: scale(0.07);
-  animation: shake_341 2s infinite;
-  top: 5px;
-  left: 8px;
-  rotate: 0deg;
-}
-
-button:active {
-  transform: scale(0.7);
-}
-
-button:hover {
-  box-shadow: 0px 0px 0px 10px #00000017;
-}
-
-button:focus {
-  color: #464646;
-}
-
-button:focus .icon {
-  transform: scale(0.07);
-  animation: launch_341 2s alternate;
-}
-
-button:focus .icon path {
-  animation: fill_341 2s linear;
-  animation-fill-mode: forwards;
-}
-
-button:focus .launch {
-  top: -90%;
-}
-
-@keyframes shake_341 {
-  10%, 90% { transform: scale(0.07) translate3d(-6px, 0, 0); }
-  20%, 80% { transform: scale(0.07) translate3d(7px, 0, 0); }
-  30%, 50%, 70% { transform: scale(0.07) translate3d(-9px, 0, 0); }
-  40%, 60% { transform: scale(0.07) translate3d(9px, 0, 0); }
-}
-
-@keyframes launch_341 {
-  0% { top: 0px; opacity: 1; }
-  20% { top: -100%; opacity: 1; }
-  20.5% { opacity: 0; }
-  24% { opacity: 0; top: 100%; }
-  25% { opacity: 1; }
-  100% { top: 6px; }
-}
-
-@keyframes fill_341 {
-  0% { fill: #fff; }
-  20% { fill: #fff; }
-  20.5% { opacity: 0; }
-  100% { fill: #464646; }
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #0d1023;
-}
-    /* === TARJETAS === */
-    .card {
-      width: 190px;
-      height: 254px;
-      background: rgb(103, 225, 255);
-      transition: all 0.4s;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.705);
-      font-size: 30px;
-      font-weight: 900;
-    }
-    .card:hover {
-      border-radius: 15px;
-      cursor: pointer;
-      transform: scale(1.2);
-      background: rgb(103, 151, 255);
-    }
-    .first-content {
-      height: 100%; width: 100%;
-      transition: all 0.4s;
-      display: flex; justify-content: center; align-items: center;
-      opacity: 1; border-radius: 15px;
-    }
-    .card:hover .first-content {
-      height: 0px; opacity: 0;
-    }
-    .second-content {
-      height: 0%; width: 100%; opacity: 0;
-      display: flex; justify-content: center; align-items: center;
-      border-radius: 15px;
-      transition: all 0.4s;
-      font-size: 0px;
-      transform: rotate(90deg) scale(-1);
-    }
-    .card:hover .second-content {
-      opacity: 1;
-      height: 100%;
-      font-size: 1.8rem;
-      transform: rotate(0deg);
-    }
-
-    /* === RECOMENDADOS === */
-    .recommended { margin-top:22px }
-    .rec-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px }
-    .rec-card { background:var(--panel); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:12px }
-    .rec-meta { display:flex; align-items:center; gap:10px }
-    .avatar { width:36px; height:36px; border-radius:50%; background:#7a1f1f; display:flex; align-items:center; justify-content:center; color:#fff }
-    .rec-thumb { height:120px; background:#f3f3f3; border-radius:4px; display:flex; align-items:center; justify-content:center; color:#222 }
-    .rec-title { font-weight:600; color:#fff }
-
-    /* === BUSCADOR === */
-    .controls { display:flex; gap:12px; align-items:center; margin-top:20px }
-    .search { flex:1; background:var(--surface); padding:10px; border-radius:8px; display:flex; gap:10px; align-items:center }
-    .search input { background:transparent; border:0; outline:none; color:#e6eef6; font-size:14px; width:100% }
-    .btn { background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:8px; cursor:pointer; color:var(--muted) }
-
-    table { width:100%; border-collapse:collapse; margin-top:16px }
-    thead th { font-weight:600; text-align:left; padding:10px 8px; color:var(--muted); font-size:13px }
-    tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(255,255,255,0.02) }
-    .file-name { display:flex; align-items:center; gap:12px }
-    .file-icon { width:36px; height:36px; border-radius:6px; background:#143a72; display:inline-flex; align-items:center; justify-content:center }
-    .muted { color:var(--muted) }
-
-    @media (max-width:900px) {
-      .rec-grid { grid-template-columns:1fr }
-      .templates { overflow:auto; padding-bottom:8px }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <header>
-      <h1>Crear nuevo</h1>
-    </header>
-
-    <div class="templates" role="list">
-      <!DOCTYPE html>
-<html lang="es">
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nuevo Proyectoo - Word Like HTML</title>
+<title>Pantalla tipo Word</title>
 <style>
-button {
+:root {
+  --bg:#1f2933;--panel:#23272b;--muted:#9aa4ad;--accent:#0b5ed7;
+  --card:#111214;--surface:#151617;--glass:rgba(255,255,255,0.03);
+  --radius:12px;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+* { box-sizing:border-box }
+html,body { height:100%; margin:0; background:linear-gradient(180deg,var(--bg),#121416); color:#e6eef6; }
+.container { max-width:1200px; margin:28px auto; padding:24px; position:relative; }
+
+header { display:flex; align-items:center; gap:24px; justify-content:space-between }
+h1 { font-size:18px; margin:0; color:#fff }
+
+.templates { display:flex; gap:20px; padding:20px 0; flex-wrap:wrap; }
+
+/* BOTÓN NUEVO PROYECTO */
+button.nuevo-proyecto {
   padding: 15px 30px 15px 50px;
   background: #181c35;
   border-radius: 30px;
@@ -253,211 +33,207 @@ button {
   transition: all ease-in-out .5s;
   border: #ffffff56 solid 1px;
   box-shadow: #51eafd 0px 0px 50px -15px;
+  cursor: pointer;
 }
+button.nuevo-proyecto .text { z-index: 9; transition: all ease-in-out .3s; }
 
-button:before {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: -90%;
-  left: -90%;
-  filter: blur(20px);
-  background: #a11ee3;
+/* BOTÓN PERFIL */
+.profile-btn {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: #0b5ed7;
+  color: #fff;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+  border:none;
+  transition: all 0.3s ease;
 }
+.profile-btn:hover { background:#084298; transform: scale(1.1); }
 
-button:after {
-  content: "";
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  bottom: -90%;
-  right: -90%;
-  filter: blur(20px);
-  background: #51eafd;
+/* TARJETAS */
+.card {
+  width: 190px; height: 254px;
+  background: rgb(103, 225, 255);
+  transition: all 0.4s;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.705);
+  font-size: 30px; font-weight: 900; position: relative;
 }
+.card:hover { border-radius: 15px; cursor: pointer; transform: scale(1.2); background: rgb(103, 151, 255); }
+.first-content { height:100%; width:100%; transition: all 0.4s; display:flex; justify-content:center; align-items:center; opacity:1; border-radius:15px; }
+.card:hover .first-content { height:0px; opacity:0; }
+.second-content {
+  height:0%; width:100%; opacity:0;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  border-radius:15px;
+  transition: all 0.4s;
+  font-size:0px; transform: rotate(90deg) scale(-1);
+}
+.card:hover .second-content { opacity:1; height:100%; font-size:1.2rem; transform: rotate(0deg); }
 
-button .icon {
-  transform: scale(0.07);
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 14px;
-  top: 2px;
-  transition: all ease-in-out .5s;
-  z-index: 9;
-  rotate: 45deg
+/* BOTÓN dentro de tarjeta */
+.btn-select {
+  margin-top: 12px; padding: 8px 16px; border-radius: 8px;
+  border: none; background-color: #0b5ed7; color: white;
+  font-weight: 600; cursor: pointer; transition: all 0.3s ease;
 }
+.btn-select:hover { background-color: #084298; transform: scale(1.05); }
 
-button .icon path {
-  fill: #fff;
-}
+/* RECOMENDADOS */
+.recommended { margin-top:22px }
+.rec-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px }
+.rec-card { background:var(--panel); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:12px }
+.rec-meta { display:flex; align-items:center; gap:10px }
+.avatar { width:36px; height:36px; border-radius:50%; background:#7a1f1f; display:flex; align-items:center; justify-content:center; color:#fff }
+.rec-thumb { height:120px; background:#f3f3f3; border-radius:4px; display:flex; align-items:center; justify-content:center; color:#222 }
+.rec-title { font-weight:600; color:#fff }
 
-button .launch {
-  background: #fff;
-  width: 300px;
-  height: 300px;
-  rotate: 45deg;
-  position: absolute;
-  left: -9px;
-  top: 550%;
-  z-index: 0;
-  transform: translateX(-56%);
-  transition: all ease-in-out 1s;
-}
+/* BUSCADOR */
+.controls { display:flex; gap:12px; align-items:center; margin-top:20px }
+.search { flex:1; background:var(--surface); padding:10px; border-radius:8px; display:flex; gap:10px; align-items:center }
+.search input { background:transparent; border:0; outline:none; color:#e6eef6; font-size:14px; width:100% }
+.btn { background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:8px; cursor:pointer; color:var(--muted) }
 
-button .text {
-  z-index: 9;
-  transition: all ease-in-out .3s;
-}
+table { width:100%; border-collapse:collapse; margin-top:16px }
+thead th { font-weight:600; text-align:left; padding:10px 8px; color:var(--muted); font-size:13px }
+tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(255,255,255,0.02) }
+.file-name { display:flex; align-items:center; gap:12px }
+.file-icon { width:36px; height:36px; border-radius:6px; background:#143a72; display:inline-flex; align-items:center; justify-content:center }
+.muted { color:var(--muted) }
 
-button:hover .icon {
-  transform: scale(0.07);
-  animation: shake_341 2s infinite;
-  top: 5px;
-  left: 8px;
-  rotate: 0deg;
-}
-
-button:active {
-  transform: scale(0.7);
-}
-
-button:hover {
-  box-shadow: 0px 0px 0px 10px #00000017;
-}
-
-button:focus {
-  color: #464646;
-}
-
-button:focus .icon {
-  transform: scale(0.07);
-  animation: launch_341 2s alternate;
-}
-
-button:focus .icon path {
-  animation: fill_341 2s linear;
-  animation-fill-mode: forwards;
-}
-
-button:focus .launch {
-  top: -90%;
-}
-
-@keyframes shake_341 {
-  10%, 90% { transform: scale(0.07) translate3d(-6px, 0, 0); }
-  20%, 80% { transform: scale(0.07) translate3d(7px, 0, 0); }
-  30%, 50%, 70% { transform: scale(0.07) translate3d(-9px, 0, 0); }
-  40%, 60% { transform: scale(0.07) translate3d(9px, 0, 0); }
-}
-
-@keyframes launch_341 {
-  0% { top: 0px; opacity: 1; }
-  20% { top: -100%; opacity: 1; }
-  20.5% { opacity: 0; }
-  24% { opacity: 0; top: 100%; }
-  25% { opacity: 1; }
-  100% { top: 6px; }
-}
-
-@keyframes fill_341 {
-  0% { fill: #fff; }
-  20% { fill: #fff; }
-  20.5% { opacity: 0; }
-  100% { fill: #464646; }
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #0d1023;
-}
+@media (max-width:900px) { .rec-grid { grid-template-columns:1fr } .templates { overflow:auto; padding-bottom:8px } }
 </style>
 </head>
 <body>
-  <button>
-    <span class="icon">
-      <svg height="303.09363" width="187.41829" version="1.1">
-        <path id="path4" stroke-linecap="round" style="stroke:none;stroke-width:2.81;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none" d="m 105.04479,7.9451197 c -0.54247,-0.518571 -1.09286,-1.029222 -1.64524,-1.54186 -0.61595,-0.572255 -1.22596,-1.146482 -1.85384,-1.710782 -1.25775,-1.134567 -2.537358,-2.259184 -3.844788,-3.36394 -2.09427,-1.77237697 -5.16413,-1.77038997 -7.26039,0 -1.30742,1.104756 -2.58107,2.227394 -3.83882,3.35798 -0.63782,0.574234 -1.25577,1.156416 -1.87769,1.734625 -0.53847,0.502703 -1.0829,1.003419 -1.61143,1.512084 -0.88818,0.848436 -1.75648,1.70482 -2.61684,2.5651783 -0.14306,0.143062 -0.28811,0.288111 -0.42919,0.43316 -17.060123,17.22703 -28.588524,37.172235 -35.801225,61.735159 -0.125179,0.435146 -0.260293,0.860358 -0.387459,1.293517 -0.04371,0.154984 -0.09339,0.300033 -0.137101,0.455017 -0.0099,0.03377 -0.0079,0.07153 -0.01788,0.105302 -5.766187,20.286964 -8.524101,43.53849 -8.524101,70.45796 0,3.05993 0.05365,6.10596 0.13114,9.14403 l -24.167515,28.14543 c -0.707361,0.82261 -1.160391,1.83199 -1.3074264,2.90495 l -9.80369097,72.24621 c -0.311955,2.29892 0.818631,4.55414 2.84931497,5.67479 2.028696,1.12263 4.538239,0.88221 6.320552,-0.60206 L 51.189952,227.47351 h 24.37615 c -3.33215,5.3072 -5.31316,12.12847 -5.31514,19.66505 0.002,4.51638 0.72127,8.8599 2.15983,12.95305 1.93929,5.40854 7.59023,18.67752 13.573,32.72739 l 2.91687,6.85505 c 0.88221,2.07439 2.91687,3.42156 5.17208,3.41957 1.52003,0.002 2.94072,-0.61199 3.97593,-1.6472 0.49873,-0.49873 0.90804,-1.09879 1.19615,-1.77635 l 3.020198,-7.10143 c 5.93309,-13.93661 11.53635,-27.10227 13.48358,-32.51875 1.42267,-4.06137 2.14394,-8.40687 2.14394,-12.91729 0,-7.53459 -1.983,-14.35387 -5.31515,-19.66107 h 23.65289 l 41.9668,35.01637 c 1.78032,1.48626 4.29185,1.72469 6.32055,0.60205 0.46892,-0.2583 0.88817,-0.5782 1.25378,-0.94381 1.22,-1.22 1.83596,-2.96058 1.59553,-4.73097 l -9.80569,-72.24027 c -0.14704,-1.07297 -0.60007,-2.08235 -1.30743,-2.90495 l -23.45419,-27.31289 c 0.0914,-3.31427 0.14107,-6.63847 0.14306,-9.97857 0,-26.93934 -2.75792,-50.202781 -8.53006,-70.499678 -0.006,-0.02183 -0.006,-0.0457 -0.012,-0.06753 -0.0278,-0.09936 -0.0596,-0.190728 -0.0874,-0.290098 -0.26625,-0.929902 -0.5484,-1.843908 -0.83055,-2.761888 -7.23257,-23.950938 -18.64573,-43.486827 -35.37602,-60.391968 -0.16279,-0.16704 -0.32573,-0.329972 -0.49064,-0.49489 -0.84022,-0.8487053 -1.69701,-1.6927643 -2.57114,-2.5274333 z m 12.504,114.1176503 c 0,6.2669 -2.44,12.16423 -6.87492,16.59915 -4.43293,4.43293 -10.32827,6.87491 -16.599138,6.87491 -12.94511,-0.002 -23.47407,-10.53094 -23.47605,-23.47605 v 0 c 0.004,-12.94709 10.53889,-23.47406 23.47406,-23.47406 6.268888,-0.002 12.166218,2.43801 16.601138,6.87293 4.43491,4.43492 6.8769,10.33025 6.87491,16.60312 z"></path>
-      </svg>
-    </span>
-    <span class="text">Nuevo Proyectoo</span>
-    <span class="launch"></span>
-  </button>
-</body>
-</html>
+<div class="container">
+    <h1>Crear nuevo</h1>
+   <header>  
+      <button id="botonComunidad" class="profile-btn">A</button>
+<script>const botonComunidad = document.getElementById('botonComunidad')
+    botonComunidad.addEventListener('click',(el)=>{
+      el.preventDefault();
+      window.location.href="/community"
+    });
+  </script>
+    </a>
+  </header>
 
+    <button class="nuevo-proyecto" onclick="nuevoProyecto()">
+    <span class="text">Nuevo Proyecto</span>
+  </button>
 
-      <!-- TARJETAS -->
-      <div class="card">
-        <div class="first-content"><span>Random Forest</span></div>
-        <div class="second-content"><span>Descripción</span></div>
-      </div>
-
-      <div class="card">
-        <div class="first-content"><span>Deep Learning</span></div>
-        <div class="second-content"><span>Descripción</span></div>
-      </div>
-
-      <div class="card">
-        <div class="first-content"><span>XGBoost</span></div>
-        <div class="second-content"><span>Descripción</span></div>
+  <h2 style="color:white; margin-top:24px;">Modelos</h2>
+  <div class="templates" role="list">
+    <!-- TARJETAS -->
+    <div class="card">
+      <div class="first-content"><span>Random Forest</span></div>
+      <div class="second-content">
+        <span>Descripción</span>
+        <button id="botonRandomF"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <script>const botonRandomF = document.getElementById('botonRandomF')
+          botonRandomF.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dasboard"
+          });
+        </script>
       </div>
     </div>
 
-    <!-- SECCIÓN RECOMENDADOS -->
-    <section class="recommended">
-      <h2 style="margin:0 0 12px 0;color:var(--muted)">Recomendados</h2>
-      <div class="rec-grid">
-        <div class="rec-card">
-          <div class="rec-meta"><div class="avatar">A</div><div class="muted">Este archivo se ha editado recientemente</div></div>
-          <div class="rec-thumb">Vista previa del documento</div>
-          <div class="rec-title">Tecnológico Nacional de México - Avance proyecto iteración 1</div>
-        </div>
-        <div class="rec-card">
-          <div class="rec-meta"><div class="avatar">A</div><div class="muted">Ha editado</div></div>
-          <div class="rec-thumb">Miniatura</div>
-          <div class="rec-title">Minuta de la reunión (Formato)</div>
-        </div>
+    <div class="card">
+      <div class="first-content"><span>Deep Learning</span></div>
+      <div class="second-content">
+        <span>Descripción</span>
+        <button id="botonDeepL"class="btn-select" onclick="seleccionarModelo('Random Forest')">Seleccionar</button>
+        <script>const botonDeepL = document.getElementById('botonDeepL')
+          botonDeepL.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dashboard"
+          });
+        </script>
       </div>
-    </section>
-
-    <!-- BUSCADOR -->
-    <div class="controls">
-      <div class="search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6"></circle></svg>
-        <input id="q" placeholder="Buscar en mis archivos" oninput="filterFiles()">
-      </div>
-      <button class="btn" onclick="toggleView()">Filtrar</button>
-      <button class="btn" onclick="upload()">Cargar</button>
     </div>
 
-    <!-- TABLA DE ARCHIVOS -->
-    <table aria-label="Lista de archivos">
-      <thead><tr><th>Nombre</th><th>Modificado</th><th>Propietario</th><th>Actividad</th></tr></thead>
-      <tbody id="files">
-        <tr><td><div class="file-name"><div class="file-icon">W</div><div><div>Tecnológico Nacional de México - Avance proyecto iteración 1</div><div class="muted" style="font-size:12px">Archivos de ALEJANDRO P</div></div></div></td><td>Ayer a las 6:26 p.m.</td><td>ALEJANDRO PUENTE RAMIREZ</td><td class="muted">Lo abre con frecuencia</td></tr>
-        <tr><td><div class="file-name"><div class="file-icon">M</div><div><div>Minuta de la reunión (Formato)</div><div class="muted" style="font-size:12px">23 sept</div></div></div></td><td>23/09/2025</td><td>ALEJANDRO P</td><td class="muted">Editado</td></tr>
-        <tr><td><div class="file-name"><div class="file-icon">D</div><div><div>Notas personales</div><div class="muted" style="font-size:12px">Carpeta Personal</div></div></div></td><td>Hoy a las 10:47 p.m.</td><td>YO</td><td class="muted">Reciente</td></tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <div class="first-content"><span>XGBoost</span></div>
+      <div class="second-content">
+        <span>Descripción</span>
+        <button id="botonXGB"="btn-select" onclick="seleccionarModelo('XGBoost')">Seleccionar</button>
+        <script>const botonXGB = document.getElementById('botonXGB')
+          botonXGB.addEventListener('click',(el)=>{
+          el.preventDefault();
+          window.location.href="/dashboard"
+          });
+        </script>
+      </div>
+    </div>
   </div>
 
-  <script>
-    function createNew(name){ alert('Se creó: '+name+' (simulación)'); }
-    function toggleView(){ alert('Abrir panel de filtros (simulación)'); }
-    function upload(){ alert('Seleccionar archivo para subir (simulación)'); }
-    function filterFiles(){
-      const q = document.getElementById('q').value.toLowerCase();
-      const rows = document.querySelectorAll('#files tr');
-      rows.forEach(r=>{
-        const text = r.innerText.toLowerCase();
-        r.style.display = text.includes(q) ? '' : 'none';
-      });
-    }
-  </script>
+  <!-- RECOMENDADOS -->
+  <section class="recommended">
+    <h2 style="margin:0 0 12px 0;color:var(--muted)">Recomendados</h2>
+    <div class="rec-grid">
+      <div class="rec-card">
+        <div class="rec-meta"><div class="avatar">A</div><div class="muted">Este archivo se ha editado recientemente</div></div>
+        <div class="rec-thumb">Vista previa del documento</div>
+        <div class="rec-title">Tecnológico Nacional de México - Avance proyecto iteración 1</div>
+      </div>
+      <div class="rec-card">
+        <div class="rec-meta"><div class="avatar">A</div><div class="muted">Ha editado</div></div>
+        <div class="rec-thumb">Miniatura</div>
+        <div class="rec-title">Minuta de la reunión (Formato)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUSCADOR -->
+  <div class="controls">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.6"></circle></svg>
+      <input id="q" placeholder="Buscar en mis archivos" oninput="filterFiles()">
+    </div>
+    <button class="btn" onclick="toggleView()">Filtrar</button>
+    <button class="btn" onclick="upload()">Cargar</button>
+  </div>
+
+  <!-- TABLA DE ARCHIVOS -->
+  <table aria-label="Lista de archivos">
+    <thead><tr><th>Nombre</th><th>Modificado</th><th>Propietario</th><th>Actividad</th></tr></thead>
+    <tbody id="files">
+      <tr><td><div class="file-name"><div class="file-icon">W</div><div><div>Tecnológico Nacional de México - Avance proyecto iteración 1</div><div class="muted" style="font-size:12px">Archivos de ALEJANDRO P</div></div></div></td><td>Ayer a las 6:26 p.m.</td><td>ALEJANDRO PUENTE RAMIREZ</td><td class="muted">Lo abre con frecuencia</td></tr>
+      <tr><td><div class="file-name"><div class="file-icon">M</div><div><div>Minuta de la reunión (Formato)</div><div class="muted" style="font-size:12px">23 sept</div></div></div></td><td>23/09/2025</td><td>ALEJANDRO P</td><td class="muted">Editado</td></tr>
+      <tr><td><div class="file-name"><div class="file-icon">D</div><div><div>Notas personales</div><div class="muted" style="font-size:12px">Carpeta Personal</div></div></div></td><td>Hoy a las 10:47 p.m.</td><td>YO</td><td class="muted">Reciente</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+let modeloSeleccionado = null;
+
+function seleccionarModelo(nombre) {
+  modeloSeleccionado = nombre;
+  alert('Modelo seleccionado: ' + nombre);
+}
+
+function nuevoProyecto() {
+  if (!modeloSeleccionado) {
+    alert('Debes seleccionar un modelo antes de crear un nuevo proyecto.');
+    return;
+  }
+  alert('Nuevo proyecto creado usando el modelo: ' + modeloSeleccionado);
+}
+
+function toggleView(){ alert('Abrir panel de filtros (simulación)'); }
+function upload(){ alert('Seleccionar archivo para subir (simulación)'); }
+function filterFiles(){
+  const q = document.getElementById('q').value.toLowerCase();
+  const rows = document.querySelectorAll('#files tr');
+  rows.forEach(r=>{
+    const text = r.innerText.toLowerCase();
+    r.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+</script>
 </body>
 </html>
