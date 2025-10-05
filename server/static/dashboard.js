@@ -1,23 +1,31 @@
-// Obtener el contexto del canvas
-    const ctx = document.getElementById('myPieChart').getContext('2d');
+// dashboard.js
+document.addEventListener('DOMContentLoaded', () => {
+    // Seleccionamos los elementos del formulario por su ID
+    const predictForm = document.getElementById('predict-form');
+    const csvButton = document.getElementById('csv-button');
+    const csvInput = document.getElementById('csv-input');
+    const fileNameDisplay = document.getElementById('file-name-display');
 
-    // Crear la gráfica
-    new Chart(ctx, {
-      type: 'pie', // tipo: pastel
-      data: {
-//        labels: ['Por tránsito', 'Por velocidad radial'],
-        datasets: [{
-          label: 'Método de descubrimiento',
-          data: [95, 5], // ← los valores (porcentaje o cantidad)
-          backgroundColor: [
-            'rgba(75, 192, 192, 0.7)',
-            'rgba(255, 205, 86, 0.7)',
-            'rgba(255, 99, 132, 0.7)',
-            'rgba(54, 162, 235, 0.7)'
-          ],
-          borderColor: 'white',
-          borderWidth: 2
-        }]
-      },
+    // Verificamos que todos los elementos existan
+    if (predictForm && csvButton && csvInput && fileNameDisplay) {
 
-    });
+        // Cuando el usuario haga clic en el botón visible "Subir CSV"...
+        csvButton.addEventListener('click', () => {
+            // ...hacemos clic en el input de archivo oculto.
+            csvInput.click();
+        });
+
+        // Cuando el usuario seleccione un archivo...
+        csvInput.addEventListener('change', () => {
+            if (csvInput.files.length > 0) {
+                // Mostramos el nombre del archivo
+                fileNameDisplay.textContent = csvInput.files[0].name;
+
+                // ¡Enviamos el formulario automáticamente!
+                predictForm.submit();
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        });
+    }
+});

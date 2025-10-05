@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exosis - Dashboard de Modelo</title>
-    
+    <title>Exosis - Model Dashboard</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
-    
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
 </head>
 <body>
@@ -23,8 +23,8 @@
                 <div class="card">
                     <h3 class="accent-indigo">Hyperparameters</h3>
                     <div class="param-text">
-                        <p><span>Árboles:</span> -.</p>
-                        <p><span>Tasa de Aprendizaje:</span> -.</p>
+                        <p><span>Trees:</span> -.</p>
+                        <p><span>Learning Rate:</span> -.</p>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-bar-fill" style="width: 85%;"></div>
@@ -40,12 +40,22 @@
 
                 <div class="sub-grid">
                     <div class="card">
-                        <h3 class="accent-teal">Predict</h3>
-                        <div class="btn-wrapper">
-                            <button class="btn btn-teal">CSV</button>
-                            <button class="btn btn-teal">Single</button>
-                        </div>
+                        <h3 class="accent-teal">Predict with CSV</h3>
+                        <p class="muted" style="font-size: 14px; margin-bottom: 24px;">Upload a file to see the results in a new view.</p>
+                        
+                        <form id="predict-form" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+                            
+                            <input type="hidden" name="modelo_seleccionado" value="{{ modelo_seleccionado }}">
+                            
+                            <input type="file" id="csv-input" name="csvfile" style="display: none;" accept=".csv">
+                            <button type="button" id="csv-button" class="btn btn-teal">
+                                <i class="fa-solid fa-upload" style="margin-right: 8px;"></i>
+                                Upload CSV
+                            </button>
+                            <span id="file-name-display" class="muted" style="margin-left: 16px;"></span>
+                        </form>
                     </div>
+
                     <div class="card">
                         <h3 class="accent-red">Train</h3>
                         <div class="btn-wrapper">
@@ -59,7 +69,7 @@
 
     <div id="botonInicioContainer">
         <div id="botonInicio">
-            <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Icono de Inicio">
+            <img src="{{ url_for('static', filename='logo-mini.jpeg') }}" alt="Home Icon">
         </div>
     </div>
 
@@ -75,15 +85,15 @@
         new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Correctos', 'Incorrectos'],
+                labels: ['Correct', 'Incorrect'],
                 datasets: [{
                     data: [95, 5],
                     // Colores que combinan con el tema "Exosis"
                     backgroundColor: [
                         '#4f46e5', // Indigo-600
-                        'rgba(255, 255, 255, 0.1)' // Fondo de tarjeta
+                        'rgba(255, 255, 255, 0.1)' // Card background
                     ],
-                    borderColor: '#0c0a1d', // Color de fondo principal
+                    borderColor: '#0c0a1d', // Main background color
                     borderWidth: 4
                 }]
             },

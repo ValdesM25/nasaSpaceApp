@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
       modeloSeleccionado = nombreDelModelo;
       
       // Actualizamos el texto del botón principal para dar feedback al usuario
-      botonNuevoProyecto.querySelector('span').textContent = `Crear Proyecto con: ${nombreDelModelo}`;
+      botonNuevoProyecto.querySelector('span').textContent = `New Project with: ${nombreDelModelo}`;
       botonNuevoProyecto.querySelector('i').classList.add('fa-plus'); // Aseguramos que tenga el ícono
       
       //alert('Modelo seleccionado: ' + nombreDelModelo);

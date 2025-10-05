@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exosys - Crear Nuevo</title>
+    <title>Exosys - New Project</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='modelo.css') }}">
@@ -12,128 +12,126 @@
 
   <div class="container">
     <header>
-      <h1>Crear <span class="accent">Nuevo</span></h1>
+      <h1>New <span class="accent">Project</span></h1>
       <button id="botonComunidad" class="btn btn-secondary profile-btn">A</button>
     </header>
 
     <button class="nuevo-proyecto btn btn-primary">
       <i class="fa-solid " style="margin-right: 8px;"></i>
-      <span>Selecciona un Modelo</span>
+      <span>Model Selection</span>
     </button>
 
-    <h2>Modelos</h2>
+    <h2>Models</h2>
     <div class="templates" role="list">
         <div class="card model-card">
           <div class="first-content"><span>Random Forest</span></div>
-          <div class="second-content"><span>Descripción</span><button class="btn btn-primary">Seleccionar</button></div>
+          <div class="second-content"><span>Ensemble of decision trees for classification/regression</span><button class="btn btn-primary">Select</button></div>
         </div>
         <div class="card model-card">
           <div class="first-content"><span>Deep Learning</span></div>
-          <div class="second-content"><span>Descripción</span><button class="btn btn-primary">Seleccionar</button></div>
+          <div class="second-content"><span>Multi-layered neural networks for complex pattern recognition</span><button class="btn btn-primary">Select</button></div>
         </div>
         <div class="card model-card">
           <div class="first-content"><span>XGBoost</span></div>
-          <div class="second-content"><span>Descripción</span><button class="btn btn-primary">Seleccionar</button></div>
+          <div class="second-content"><span>A high-performance, optimized gradient boosting framework</span><button class="btn btn-primary">Select</button></div>
         </div>
         <div class="card model-card">
-          <div class="first-content"><span>Regresión Lineal</span></div>
-          <div class="second-content"><span>Descripción</span><button class="btn btn-primary">Seleccionar</button></div>
+          <div class="first-content"><span>Linear Regression</span></div>
+          <div class="second-content"><span>Predicting continuous values by fitting a straight line</span><button class="btn btn-primary">Select</button></div>
         </div>
         <div class="card model-card">
           <div class="first-content"><span>K-Means</span></div>
-          <div class="second-content"><span>Descripción</span><button class="btn btn-primary">Seleccionar</button></div>
+          <div class="second-content"><span>An unsupervised algorithm that groups data into K clusters</span><button class="btn btn-primary">Select</button></div>
         </div>
     </div>
 
-    <div class="content-wrapper">
-        <section class="card">
-            <h2>Recomendados</h2>
-            <div class="rec-grid">
-              <div class="rec-card">
+<div class="content-wrapper">
+    <section class="card">
+        <h2>Recommendations</h2>
+        <div class="rec-grid">
+            <a href="#" class="rec-card">
                 <div class="rec-meta">
-                  <div class="muted">Modelo de Clasificación • Dataset: TESS Public</div>
+                    <div class="muted">Classification Model • Dataset: TESS Public</div>
                 </div>
-                <div class="rec-thumb">Usa una Red Neuronal (CNN) para detectar tránsitos planetarios.</div>
-                <div class="rec-title">Clasificador de Curvas de Luz</div>
-              </div>
-              <br>
-
-              <div class="rec-card">
+                <div class="rec-thumb">Use a Neural Network (CNN) to detect planetary transits.</div>
+                <div class="rec-title">Light Curve Classifier</div>
+            </a>
+            <a href="#" class="rec-card">
                 <div class="rec-meta">
-                  <div class="muted">Análisis no Supervisado • Dataset: Simulaciones JWST</div>
+                    <div class="muted">Unsupervised Analysis • Dataset: JWST Simulations</div>
                 </div>
-                <div class="rec-thumb">Aplica Isolation Forest para encontrar biofirmas en espectros.</div>
-                <div class="rec-title">Detector de Anomalías Espectrales</div>
-              </div>
-            </div>
-        </section>
+                <div class="rec-thumb">Apply Isolation Forest to find biosignatures in spectra.</div>
+                <div class="rec-title">Spectral Anomaly Detector</div>
+            </a>
+        </div>
+    </section>
 
-        <section class="card">
-            <div class="controls">
-                <div class="search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="q" placeholder="Buscar en mis archivos..." oninput="filterFiles()">
-                </div>
-                <button class="btn btn-secondary">Filtrar</button>
-                <button class="btn btn-secondary">Cargar</button>
+    <section class="card">
+        <div class="controls">
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="q" placeholder="Search my files..." oninput="filterFiles()">
             </div>
+            <button class="btn btn-secondary">Filter</button>
+            <button class="btn btn-secondary">Upload</button>
+        </div>
 
-            <table aria-label="Lista de archivos">
-              <thead>
+        <table aria-label="List of files">
+            <thead>
                 <tr>
-                  <th>Nombre</th>
-                  <th>Modificado</th>
-                  <th>Propietario</th>
-                  <th>Actividad</th>
+                    <th>Name</th>
+                    <th>Modified</th>
+                    <th>Owner</th>
+                    <th>Activity</th>
                 </tr>
-              </thead>
-              <tbody id="files">
-                <tr>
-                  <td>
-                    <div class="file-name">
-                      <div class="file-icon">E</div>
-                      <div>
-                        <div>exploracion_kepler_q4_draft.ipynb</div>
-                        <div class="muted">Notebook de exploración de datos</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="muted">Hoy a las 9:02 p.m.</td>
-                  <td class="muted">YO</td>
-                  <td class="muted">Ejecutando celda 23...</td>
+            </thead>
+            <tbody id="files">
+                <tr data-href="#">
+                    <td>
+                        <div class="file-name">
+                            <div class="file-icon">E</div>
+                            <div>
+                                <div>exploracion_kepler_q4_draft.ipynb</div>
+                                <div class="muted">Data exploration notebook</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Today at 9:02 PM</td>
+                    <td class="muted">Me</td>
+                    <td class="muted">Running cell 23...</td>
                 </tr>
-                <tr>
-                  <td>
-                    <div class="file-name">
-                      <div class="file-icon">R</div>
-                      <div>
-                        <div>raw_data_trappist_sector_18.csv</div>
-                        <div class="muted">Datos crudos - sin procesar</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="muted">Ayer a las 3:15 p.m.</td>
-                  <td class="muted">A. Puente</td>
-                  <td class="muted">Actualizado por "A. Puente"</td>
+                <tr data-href="#">
+                    <td>
+                        <div class="file-name">
+                            <div class="file-icon">R</div>
+                            <div>
+                                <div>raw_data_trappist_sector_18.csv</div>
+                                <div class="muted">Raw data - unprocessed</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Yesterday at 3:15 PM</td>
+                    <td class="muted">A. Puente</td>
+                    <td class="muted">Updated by A. Puente</td>
                 </tr>
-                <tr>
-                  <td>
-                    <div class="file-name">
-                      <div class="file-icon">L</div>
-                      <div>
-                        <div>limpieza_script_v2_testing.py</div>
-                        <div class="muted">Script de pre-procesamiento</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="muted">Hoy a las 8:55 p.m.</td>
-                  <td class="muted">YO</td>
-                  <td class="muted">Error de memoria (hace 5 min)</td>
+                <tr data-href="#">
+                    <td>
+                        <div class="file-name">
+                            <div class="file-icon">L</div>
+                            <div>
+                                <div>limpieza_script_v2_testing.py</div>
+                                <div class="muted">Preprocessing script</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="muted">Today at 8:55 PM</td>
+                    <td class="muted">Me</td>
+                    <td class="muted">Memory error (5 min ago)</td>
                 </tr>
-              </tbody>
-            </table>
-        </section>
-    </div>
+            </tbody>
+        </table>
+    </section>
+</div>
   </div>
 
   <script src="{{ url_for('static', filename='modelo.js') }}"></script>
