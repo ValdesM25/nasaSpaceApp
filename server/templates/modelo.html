@@ -108,11 +108,15 @@ tbody td { padding:12px 8px; background:transparent; border-top:1px solid rgba(2
 </head>
 <body>
 <div class="container">
-  <header>
     <h1>Crear nuevo</h1>
-        <a href="community.html" title="Ir a perfil">
-  <button class="profile-btn" onclick="window.location.href='community.html'" title="Ir a perfil">A</button>
-
+   <header>  
+      <button id="botonComunidad" class="profile-btn">A</button>
+<script>const botonComunidad = document.getElementById('botonComunidad')
+    botonComunidad.addEventListener('click',(el)=>{
+      el.preventDefault();
+      window.location.href="/community"
+    });
+  </script>
     </a>
   </header>
 
